@@ -13,6 +13,15 @@ export const metadata = {
 export default function HomePage() {
   return (
     <>
+
+      <section className="px-6 py-10 text-center">
+        <h1 className="text-4xl font-bold text-white sm:text-6xl">Filament Farm MFG</h1>
+        <p className="mt-4 text-lg text-gray-300">
+          Custom 3D printing, storefronts, and fulfillment for miniature creators.
+        </p>
+      </section>
+
+      
       <ThreeItemGrid />
       <Carousel />
       <Footer />
