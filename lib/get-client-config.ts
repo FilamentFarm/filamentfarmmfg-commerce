@@ -3,8 +3,8 @@
 import { cookies } from 'next/headers';
 import { CLIENT_CONFIGS, ClientConfig } from './client-config';
 
-export function getClientConfig(): ClientConfig | null {
-  const cookieStore = cookies();
+export async function getClientConfig(): Promise<ClientConfig | null> {
+  const cookieStore = await cookies();
   const subdomain = cookieStore.get('client-subdomain')?.value;
 
   if (!subdomain || !CLIENT_CONFIGS[subdomain]) {
