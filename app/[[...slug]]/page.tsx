@@ -19,30 +19,28 @@ export default async function PageWrapper() {
   }`;
 
   return (
-    <>
-<section
-  className="px-6 py-10 text-center"
-  style={{
-    backgroundColor: client?.theme?.backgroundColor ?? '#000',
-    color: client?.theme?.textColor ?? '#fff'
-  }}
->
-  <h1 className="text-4xl font-bold">
-    {client?.name ?? 'Filament Farm MFG'}
-  </h1>
-  <p className="mt-4 text-lg">
-    Custom 3D printing, storefronts, and fulfillment for {client?.name || 'miniature creators'}.
-  </p>
-</section>
-
-        {client?.logoUrl && (
-          <img
-            src={client.logoUrl}
-            alt={`${client.name} logo`}
-            className="mx-auto mt-6 h-12"
-          />
-        )}
-      </section>
+  <>
+    <section
+      className="px-6 py-10 text-center"
+      style={{
+        backgroundColor: client?.theme?.backgroundColor ?? '#000',
+        color: client?.theme?.textColor ?? '#fff'
+      }}
+    >
+      {client?.logoUrl && (
+        <img
+          src={client.logoUrl}
+          alt={`${client.name} logo`}
+          className="mx-auto mb-4 h-16 w-auto"
+        />
+      )}
+      <h1 className="text-4xl font-bold">
+        {client?.name ?? 'Filament Farm MFG'}
+      </h1>
+      <p className="mt-4 text-lg">
+        Custom 3D printing, storefronts, and fulfillment for miniature creators.
+      </p>
+    </section>
 
       <ThreeItemGrid />
       <Footer />
