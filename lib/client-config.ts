@@ -28,8 +28,8 @@ export const CLIENT_CONFIGS: Record<string, ClientConfig> = {
     name: "Monsters Inc.",
     logoUrl: "/clients/monstersinc/logo.svg",
     theme: {
-      primaryColor: "#820000",
-      backgroundColor: "#000000",
+      primaryColor: "#045B5D",
+      backgroundColor: "#ff0033",
       textColor: "#ffffff"
     },
     shopifyCollectionHandle: "client-monstersinc"
