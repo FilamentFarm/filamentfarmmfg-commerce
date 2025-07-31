@@ -3,6 +3,7 @@ import { Navbar } from 'components/layout/navbar';
 import { WelcomeToast } from 'components/welcome-toast';
 import { GeistSans } from 'geist/font/sans';
 import { getCart } from 'lib/shopify';
+import { getClientConfig } from 'lib/get-client-config';
 import { ReactNode } from 'react';
 import { Toaster } from 'sonner';
 import './globals.css';
@@ -27,12 +28,25 @@ export default async function RootLayout({
 }: {
   children: ReactNode;
 }) {
-  // Don't await the fetch, pass the Promise to the context provider
   const cart = getCart();
+  const client = await getClientConfig();
+
+  const backgroundColor = client?.theme?.backgroundColor ?? '#ffffff';
+  const textColor = client?.theme?.textColor ?? '#000000';
+  const accentColor = client?.theme?.primaryColor ?? '#00ff00';
 
   return (
     <html lang="en" className={GeistSans.variable}>
-      <body className="bg-neutral-50 text-black selection:bg-teal-300 dark:bg-neutral-900 dark:text-white dark:selection:bg-pink-500 dark:selection:text-white">
+      <body
+        style={
+          {
+            '--bg-color': backgroundColor,
+            '--text-color': textColor,
+            '--accent-color': accentColor
+          } as React.CSSProperties
+        }
+        className="bg-[var(--bg-color)] text-[var(--text-color)] selection:bg-[var(--accent-color)]"
+      >
         <CartProvider cartPromise={cart}>
           <Navbar />
           <main>
