@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getCollectionProducts } from 'lib/shopify/client-products';
+import { getClientProducts } from 'lib/shopify/client-products';
 import { CLIENT_CONFIGS } from 'lib/client-config';
 import type { Product } from 'lib/shopify/types';
 import Link from 'next/link';
