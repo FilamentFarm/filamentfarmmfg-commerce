@@ -1,23 +1,36 @@
 'use client';
 
-import { getClientConfig } from 'lib/get-client-config';
-import { getCollectionProducts } from 'lib/shopify';
 import { useEffect, useState } from 'react';
+import { getCollectionProducts } from 'lib/shopify';
+import { CLIENT_CONFIGS } from 'lib/client-config';
+import type { Product } from 'lib/shopify/types';
 import Link from 'next/link';
 import Image from 'next/image';
 
 export default function Carousel() {
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState<Product[]>([]);
+
+  // Read the subdomain from browser cookie
+  function getCookieSubdomain(): string | null {
+    if (typeof document === 'undefined') return null;
+
+    const match = document.cookie
+      .split('; ')
+      .find((row) => row.startsWith('client-subdomain='));
+
+    return match?.split('=')[1] ?? null;
+  }
 
   useEffect(() => {
     (async () => {
-      const client = await getClientConfig();
+      const subdomain = getCookieSubdomain();
+      const config = subdomain ? CLIENT_CONFIGS[subdomain] : null;
       const collectionHandle =
-        client?.shopifyCollectionHandle ?? 'hidden-homepage-featured-items';
+        config?.shopifyCollectionHandle ?? 'hidden-homepage-featured-items';
 
       const items = await getCollectionProducts({ collection: collectionHandle });
 
-      setProducts(items.slice(0, 3)); // max of 3
+      setProducts(items.slice(0, 3)); // limit to 3 items
     })();
   }, []);
 
@@ -26,7 +39,7 @@ export default function Carousel() {
   return (
     <section className="overflow-x-auto py-8 px-4">
       <div className="flex gap-6 snap-x snap-mandatory scroll-pl-4 overflow-x-scroll">
-        {products.map((product: any) => (
+        {products.map((product) => (
           <Link
             key={product.id}
             href={`/product/${product.handle}`}
@@ -42,7 +55,8 @@ export default function Carousel() {
             </div>
             <h2 className="mt-4 font-semibold text-white">{product.title}</h2>
             <p className="text-gray-400">
-              {product.priceRange.maxVariantPrice.amount} {product.priceRange.maxVariantPrice.currencyCode}
+              {product.priceRange.maxVariantPrice.amount}{' '}
+              {product.priceRange.maxVariantPrice.currencyCode}
             </p>
           </Link>
         ))}
