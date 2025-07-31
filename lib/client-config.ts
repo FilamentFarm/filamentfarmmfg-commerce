@@ -16,8 +16,8 @@ export const CLIENT_CONFIGS: Record<string, ClientConfig> = {
     name: "Kongclave Miniatures",
     logoUrl: "/clients/kongclave/logo.svg",
     theme: {
-      primaryColor: "#820000",
-      backgroundColor: "#000000",
+      primaryColor: "#121212",
+      backgroundColor: "#202020",
       textColor: "#ffffff"
     },
     shopifyCollectionHandle: "client-kongclave"
@@ -28,7 +28,7 @@ export const CLIENT_CONFIGS: Record<string, ClientConfig> = {
     logoUrl: "/clients/monstersinc/logo.svg",
     theme: {
       primaryColor: "#045B5D",
-      backgroundColor: "#ff0033",
+      backgroundColor: "#575757",
       textColor: "#ffffff"
     },
     shopifyCollectionHandle: "client-monstersinc"
