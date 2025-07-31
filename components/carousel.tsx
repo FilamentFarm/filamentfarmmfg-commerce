@@ -1,40 +1,52 @@
+'use client';
+
+import { getClientConfig } from 'lib/get-client-config';
 import { getCollectionProducts } from 'lib/shopify';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { GridTileImage } from './grid/tile';
+import Image from 'next/image';
 
-export async function Carousel() {
-  // Collections that start with `hidden-*` are hidden from the search page.
-  const products = await getCollectionProducts({ collection: 'hidden-homepage-carousel' });
+export default function Carousel() {
+  const [products, setProducts] = useState([]);
 
-  if (!products?.length) return null;
+  useEffect(() => {
+    (async () => {
+      const client = await getClientConfig();
+      const collectionHandle =
+        client?.shopifyCollectionHandle ?? 'hidden-homepage-featured-items';
 
-  // Purposefully duplicating products to make the carousel loop and not run out of products on wide screens.
-  const carouselProducts = [...products, ...products, ...products];
+      const items = await getCollectionProducts({ collection: collectionHandle });
+
+      setProducts(items.slice(0, 3)); // max of 3
+    })();
+  }, []);
+
+  if (products.length === 0) return null;
 
   return (
-    <div className="w-full overflow-x-auto pb-6 pt-1">
-      <ul className="flex animate-carousel gap-4">
-        {carouselProducts.map((product, i) => (
-          <li
-            key={`${product.handle}${i}`}
-            className="relative aspect-square h-[30vh] max-h-[275px] w-2/3 max-w-[475px] flex-none md:w-1/3"
+    <section className="overflow-x-auto py-8 px-4">
+      <div className="flex gap-6 snap-x snap-mandatory scroll-pl-4 overflow-x-scroll">
+        {products.map((product: any) => (
+          <Link
+            key={product.id}
+            href={`/product/${product.handle}`}
+            className="min-w-[250px] max-w-xs snap-center rounded border border-gray-800 bg-gray-900 p-4 text-center"
           >
-            <Link href={`/product/${product.handle}`} className="relative h-full w-full">
-              <GridTileImage
+            <div className="relative aspect-square">
+              <Image
+                src={product.featuredImage.url}
                 alt={product.title}
-                label={{
-                  title: product.title,
-                  amount: product.priceRange.maxVariantPrice.amount,
-                  currencyCode: product.priceRange.maxVariantPrice.currencyCode
-                }}
-                src={product.featuredImage?.url}
                 fill
-                sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
+                className="object-cover rounded"
               />
-            </Link>
-          </li>
+            </div>
+            <h2 className="mt-4 font-semibold text-white">{product.title}</h2>
+            <p className="text-gray-400">
+              {product.priceRange.maxVariantPrice.amount} {product.priceRange.maxVariantPrice.currencyCode}
+            </p>
+          </Link>
         ))}
-      </ul>
-    </div>
+      </div>
+    </section>
   );
 }
