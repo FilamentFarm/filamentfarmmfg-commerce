@@ -1,6 +1,5 @@
 // app/[[...slug]]/page.tsx
 
-import  Carousel  from 'components/carousel';
 import { ThreeItemGrid } from 'components/grid/three-items';
 import Footer from 'components/layout/footer';
 import { getClientConfig } from 'lib/get-client-config';
@@ -34,7 +33,6 @@ export default async function PageWrapper() {
       </section>
 
       <ThreeItemGrid />
-      <Carousel />
       <Footer />
     </>
   );
