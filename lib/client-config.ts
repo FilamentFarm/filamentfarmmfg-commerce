@@ -23,5 +23,17 @@ export const CLIENT_CONFIGS: Record<string, ClientConfig> = {
     shopifyCollectionHandle: "client-kongclave"
   },
 
+export const CLIENT_CONFIGS: Record<string, ClientConfig> = {
+  monstersinc: {
+    name: "Monsters Inc.",
+    logoUrl: "/clients/monstersinc/logo.svg",
+    theme: {
+      primaryColor: "#820000",
+      backgroundColor: "#000000",
+      textColor: "#ffffff"
+    },
+    shopifyCollectionHandle: "client-monstersinc"
+  },
+  
   // Add more clients here as needed
 };
