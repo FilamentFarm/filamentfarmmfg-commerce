@@ -23,7 +23,6 @@ export const CLIENT_CONFIGS: Record<string, ClientConfig> = {
     shopifyCollectionHandle: "client-kongclave"
   },
 
-export const CLIENT_CONFIGS: Record<string, ClientConfig> = {
   monstersinc: {
     name: "Monsters Inc.",
     logoUrl: "/clients/monstersinc/logo.svg",
