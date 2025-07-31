@@ -1,8 +1,6 @@
-// components/grid/three-items.tsx
-
 import { GridTileImage } from 'components/grid/tile';
-import { getCollectionProducts } from 'lib/shopify';
 import { getClientConfig } from 'lib/get-client-config';
+import { getCollectionProducts } from 'lib/shopify';
 import type { Product } from 'lib/shopify/types';
 import Link from 'next/link';
 
@@ -36,7 +34,7 @@ function ThreeItemGridItem({
           alt={item.title}
           label={{
             position: size === 'full' ? 'center' : 'bottom',
-            title: item.title as string,
+            title: item.title,
             amount: item.priceRange.maxVariantPrice.amount,
             currencyCode: item.priceRange.maxVariantPrice.currencyCode
           }}
@@ -48,20 +46,20 @@ function ThreeItemGridItem({
 
 export async function ThreeItemGrid() {
   const client = await getClientConfig();
+  const collection = client?.shopifyCollectionHandle ?? 'hidden-homepage-featured-items';
+  const products = await getCollectionProducts({ collection });
 
-  const collection = client?.shopifyCollectionHandle || 'hidden-homepage-featured-items';
-
-  const homepageItems = await getCollectionProducts({ collection });
-
-  if (!homepageItems[0] || !homepageItems[1] || !homepageItems[2]) return null;
-
-  const [firstProduct, secondProduct, thirdProduct] = homepageItems;
+  if (!products.length) return null;
 
   return (
     <section className="mx-auto grid max-w-(--breakpoint-2xl) gap-4 px-4 pb-4 md:grid-cols-6 md:grid-rows-2 lg:max-h-[calc(100vh-200px)]">
-      <ThreeItemGridItem size="full" item={firstProduct} priority={true} />
-      <ThreeItemGridItem size="half" item={secondProduct} priority={true} />
-      <ThreeItemGridItem size="half" item={thirdProduct} />
+      {products[0] && (
+        <ThreeItemGridItem size="full" item={products[0]} priority={true} />
+      )}
+      {products[1] && (
+        <ThreeItemGridItem size="half" item={products[1]} priority={true} />
+      )}
+      {products[2] && <ThreeItemGridItem size="half" item={products[2]} />}
     </section>
   );
 }
