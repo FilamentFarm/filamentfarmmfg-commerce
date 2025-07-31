@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getCollectionProducts } from 'lib/shopify';
+import { getCollectionProducts } from 'lib/shopify/client-products';
 import { CLIENT_CONFIGS } from 'lib/client-config';
 import type { Product } from 'lib/shopify/types';
 import Link from 'next/link';
@@ -28,7 +28,8 @@ export default function Carousel() {
       const collectionHandle =
         config?.shopifyCollectionHandle ?? 'hidden-homepage-featured-items';
 
-      const items = await getCollectionProducts({ collection: collectionHandle });
+      const items = await getClientProducts(collectionHandle);
+
 
       setProducts(items.slice(0, 3)); // limit to 3 items
     })();
