@@ -7,6 +7,7 @@ import { Gallery } from 'components/product/gallery';
 import { ProductProvider } from 'components/product/product-context';
 import { ProductDescription } from 'components/product/product-description';
 import { HIDDEN_PRODUCT_TAG } from 'lib/constants';
+import { getClientConfig } from 'lib/get-client-config';
 import { getProduct, getProductRecommendations } from 'lib/shopify';
 import { Image } from 'lib/shopify/types';
 import Link from 'next/link';
@@ -52,8 +53,13 @@ export async function generateMetadata(props: {
 export default async function ProductPage(props: { params: Promise<{ handle: string }> }) {
   const params = await props.params;
   const product = await getProduct(params.handle);
+  const client = await getClientConfig();
 
   if (!product) return notFound();
+
+  const productBg = client?.theme?.productPageBackground ?? '#ffffff';
+  const buttonColor = client?.theme?.productButtonColor ?? '#000000';
+  const buttonHover = client?.theme?.productButtonHoverColor ?? '#333333';
 
   const productJsonLd = {
     '@context': 'https://schema.org',
@@ -80,32 +86,43 @@ export default async function ProductPage(props: { params: Promise<{ handle: str
           __html: JSON.stringify(productJsonLd)
         }}
       />
-      <div className="mx-auto max-w-(--breakpoint-2xl) px-4">
-        <div className="flex flex-col rounded-lg border border-neutral-200 bg-white p-8 md:p-12 lg:flex-row lg:gap-8 dark:border-neutral-800 dark:bg-black">
-          <div className="h-full w-full basis-full lg:basis-4/6">
-            <Suspense
-              fallback={
-                <div className="relative aspect-square h-full max-h-[550px] w-full overflow-hidden" />
-              }
-            >
-              <Gallery
-                images={product.images.slice(0, 5).map((image: Image) => ({
-                  src: image.url,
-                  altText: image.altText
-                }))}
-              />
-            </Suspense>
-          </div>
+      <div
+        className="min-h-screen"
+        style={
+          {
+            '--product-bg': productBg,
+            '--product-button': buttonColor,
+            '--product-button-hover': buttonHover
+          } as React.CSSProperties
+        }
+      >
+        <div className="mx-auto max-w-(--breakpoint-2xl) px-4">
+          <div className="flex flex-col rounded-lg border border-neutral-200 bg-[var(--product-bg)] p-8 md:p-12 lg:flex-row lg:gap-8 dark:border-neutral-800">
+            <div className="h-full w-full basis-full lg:basis-4/6">
+              <Suspense
+                fallback={
+                  <div className="relative aspect-square h-full max-h-[550px] w-full overflow-hidden" />
+                }
+              >
+                <Gallery
+                  images={product.images.slice(0, 5).map((image: Image) => ({
+                    src: image.url,
+                    altText: image.altText
+                  }))}
+                />
+              </Suspense>
+            </div>
 
-          <div className="basis-full lg:basis-2/6">
-            <Suspense fallback={null}>
-              <ProductDescription product={product} />
-            </Suspense>
+            <div className="basis-full lg:basis-2/6">
+              <Suspense fallback={null}>
+                <ProductDescription product={product} />
+              </Suspense>
+            </div>
           </div>
+          <RelatedProducts id={product.id} />
         </div>
-        <RelatedProducts id={product.id} />
+        <Footer />
       </div>
-      <Footer />
     </ProductProvider>
   );
 }
