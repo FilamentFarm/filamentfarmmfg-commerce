@@ -24,7 +24,7 @@ export const CLIENT_CONFIGS: Record<string, ClientConfig> = {
       textColor: "#ffffff",
       productPageBackground: "#121212",        
       productButtonColor: "#bababa",           
-      productButtonHoverColor: "#fafafa"      
+      productButtonHoverColor: "#121212"      
     },
     shopifyCollectionHandle: "client-kongclave"
   },
