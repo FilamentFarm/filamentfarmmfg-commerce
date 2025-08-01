@@ -57,7 +57,7 @@ export default async function ProductPage(props: { params: Promise<{ handle: str
 
   if (!product) return notFound();
 
-  const productBg = client?.theme?.productPageBackground ?? '#ffffff';
+  const productBg = client?.theme?.productPageBackground ?? '#00ffffff';
   const buttonColor = client?.theme?.productButtonColor ?? '#000000';
   const buttonHover = client?.theme?.productButtonHoverColor ?? '#333333';
 
