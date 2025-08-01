@@ -18,7 +18,10 @@ export const CLIENT_CONFIGS: Record<string, ClientConfig> = {
     theme: {
       primaryColor: "#121212",
       backgroundColor: "#202020",
-      textColor: "#ffffff"
+      textColor: "#ffffff",
+      productPageBackground: "#f3f3f3",        
+      productButtonColor: "#2a5298",           
+      productButtonHoverColor: "#1e3a8a"      
     },
     shopifyCollectionHandle: "client-kongclave"
   },
@@ -29,7 +32,10 @@ export const CLIENT_CONFIGS: Record<string, ClientConfig> = {
     theme: {
       primaryColor: "#045B5D",
       backgroundColor: "#575757",
-      textColor: "#ffffff"
+      textColor: "#ffffff",
+      productPageBackground: "#f3f3f3",        
+      productButtonColor: "#2a5298",           
+      productButtonHoverColor: "#1e3a8a"  
     },
     shopifyCollectionHandle: "client-monstersinc"
   },
