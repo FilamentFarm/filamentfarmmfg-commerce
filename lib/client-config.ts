@@ -7,6 +7,9 @@ export type ClientConfig = {
     primaryColor: string;
     backgroundColor: string;
     textColor: string;
+    productPageBackground?: string;
+    productButtonColor?: string;
+    productButtonHoverColor?: string;
   };
   shopifyCollectionHandle: string;
 };
