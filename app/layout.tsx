@@ -38,12 +38,14 @@ export default async function RootLayout({
   return (
     <html lang="en" className={GeistSans.variable}>
       <body
-        style={
-          {
-            '--bg-color': backgroundColor,
-            '--text-color': textColor,
-            '--accent-color': accentColor
-          } as React.CSSProperties
+        style={{
+          '--bg-color': backgroundColor,
+          '--text-color': textColor,
+          '--accent-color': accentColor,
+          '--product-button': client?.theme?.productButtonColor ?? accentColor,
+          '--product-button-hover': client?.theme?.productButtonHoverColor ?? '#333333'
+        }} as React.CSSProperties}
+
         }
         className="bg-[var(--bg-color)] text-[var(--text-color)] selection:bg-[var(--accent-color)]"
       >
