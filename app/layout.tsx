@@ -23,7 +23,7 @@ export const metadata = {
   }
 };
 
-export default async function RootLayout({
+export default async function Layout({
   children
 }: {
   children: ReactNode;
@@ -34,6 +34,8 @@ export default async function RootLayout({
   const backgroundColor = client?.theme?.backgroundColor ?? '#ffffff';
   const textColor = client?.theme?.textColor ?? '#000000';
   const accentColor = client?.theme?.primaryColor ?? '#00ff00';
+  const productButtonColor = client?.theme?.productButtonColor ?? accentColor;
+  const productButtonHoverColor = client?.theme?.productButtonHoverColor ?? '#333333';
 
   return (
     <html lang="en" className={GeistSans.variable}>
@@ -42,11 +44,9 @@ export default async function RootLayout({
           '--bg-color': backgroundColor,
           '--text-color': textColor,
           '--accent-color': accentColor,
-          '--product-button': client?.theme?.productButtonColor ?? accentColor,
-          '--product-button-hover': client?.theme?.productButtonHoverColor ?? '#333333'
-        }} as React.CSSProperties}
-
-        }
+          '--product-button': productButtonColor,
+          '--product-button-hover': productButtonHoverColor
+        } as React.CSSProperties}
         className="bg-[var(--bg-color)] text-[var(--text-color)] selection:bg-[var(--accent-color)]"
       >
         <CartProvider cartPromise={cart}>
