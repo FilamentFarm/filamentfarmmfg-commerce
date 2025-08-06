@@ -1,3 +1,4 @@
+
 import { GridTileImage } from 'components/grid/tile';
 import { getClientConfig } from 'lib/get-client-config';
 import { getCollectionProducts } from 'lib/shopify';
@@ -21,7 +22,7 @@ function ThreeItemGridItem({
     >
       <Link
         className="relative block aspect-square h-full w-full"
-        href={`/product/${item.handle}`}
+        href={/product/${item.handle}}
         prefetch={true}
       >
         <GridTileImage
@@ -51,17 +52,8 @@ export async function ThreeItemGrid() {
 
   if (!products.length) return null;
 
-  const theme = client?.theme ?? {};
-
   return (
-    <section
-      className="mx-auto grid max-w-(--breakpoint-2xl) gap-4 px-4 pb-4 md:grid-cols-6 md:grid-rows-2 lg:max-h-[calc(100vh-200px)]"
-      style={{
-        // Apply only product-button-related vars here
-        '--product-button': theme.productButtonColor ?? theme.primaryColor ?? '#111111',
-        '--product-button-hover': theme.productButtonHoverColor ?? '#333333'
-      } as React.CSSProperties}
-    >
+    <section className="mx-auto grid max-w-(--breakpoint-2xl) gap-4 px-4 pb-4 md:grid-cols-6 md:grid-rows-2 lg:max-h-[calc(100vh-200px)]">
       {products[0] && (
         <ThreeItemGridItem size="full" item={products[0]} priority={true} />
       )}
