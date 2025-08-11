@@ -28,4 +28,8 @@ export const TAGS = {
 
 export const HIDDEN_PRODUCT_TAG = 'nextjs-frontend-hidden';
 export const DEFAULT_OPTION = 'Default Title';
-export const SHOPIFY_GRAPHQL_API_ENDPOINT = '/api/2023-01/graphql.json';
+export const STOREFRONT_API_VERSION =
+  process.env.SHOPIFY_STOREFRONT_VERSION ?? '2025-07';
+
+export const SHOPIFY_GRAPHQL_API_ENDPOINT = `/api/${STOREFRONT_API_VERSION}/graphql.json`;
+
