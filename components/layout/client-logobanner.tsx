@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { getClientConfig } from '../../lib/get-client-config';
+import { getClientConfig } from '@/lib/get-client-config';
 
 export default async function ClientLogoBanner() {
   const cfg = await getClientConfig();
