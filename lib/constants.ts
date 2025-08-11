@@ -31,5 +31,19 @@ export const DEFAULT_OPTION = 'Default Title';
 export const STOREFRONT_API_VERSION =
   process.env.SHOPIFY_STOREFRONT_VERSION ?? '2025-07';
 
-export const SHOPIFY_GRAPHQL_API_ENDPOINT = `/api/${STOREFRONT_API_VERSION}/graphql.json`;
+// Read and sanitize the store domain from env.
+// Accepts values with or without protocol and trailing slash.
+const rawDomain = process.env.SHOPIFY_STORE_DOMAIN ?? '';
+export const SHOPIFY_STORE_DOMAIN = rawDomain
+  .replace(/^https?:\/\//, '')
+  .replace(/\/$/, '');
+
+// Optional: fail fast if missing (helps avoid "Invalid URL")
+if (!SHOPIFY_STORE_DOMAIN) {
+  throw new Error('Missing SHOPIFY_STORE_DOMAIN env var (e.g., my-shop.myshopify.com)');
+}
+
+export const SHOPIFY_GRAPHQL_API_ENDPOINT =
+  `https://${SHOPIFY_STORE_DOMAIN}/api/${STOREFRONT_API_VERSION}/graphql.json`;
+
 
