@@ -9,7 +9,7 @@ export default async function ClientLogoBanner() {
   return (
     <div className="w-full bg-[var(--accent-color)]">
       {/* The inner container height controls the bar height; the image scales to fit */}
-      <div className="mx-auto max-w-screen-2xl flex h-14 sm:h-16 md:h-20 lg:h-24 items-center justify-center">
+      <div className="mx-auto max-w-screen-2xl flex h-14 sm:h-25 md:h-30 lg:h-35 items-center justify-center">
         {logoUrl ? (
           <Image
             src={logoUrl}
@@ -28,4 +28,5 @@ export default async function ClientLogoBanner() {
       </div>
     </div>
   );
+
 }
