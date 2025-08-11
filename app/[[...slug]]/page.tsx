@@ -3,6 +3,7 @@
 import { ThreeItemGrid } from 'components/grid/three-items';
 import Footer from 'components/layout/footer';
 import { getClientConfig } from 'lib/get-client-config';
+import ClientLogoBanner from '@/components/layout/client-logo-banner';
 
 export const metadata = {
   description:
@@ -10,27 +11,15 @@ export const metadata = {
   openGraph: { type: 'website' }
 };
 
-export default async function PageWrapper() {
-  const client = await getClientConfig();
-
-  const title = client?.name ?? 'Filament Farm MFG';
-  const tagline = `Custom 3D printing, storefronts, and fulfillment for ${
-    client?.name || 'miniature creators'
-  }`;
-
+export default async function HomePage() {
+  // ...existing data fetching / code
   return (
     <>
-      <section className="px-6 py-10 text-center">
-        <h1 className="text-4xl font-bold text-[var(--text-color)] sm:text-6xl">{title}</h1>
-        <p className="mt-4 text-lg opacity-80 text-[var(--text-color)]">{tagline}</p>
-        {client?.logoUrl && (
-          <img
-            src={client.logoUrl}
-            alt={`${client.name} logo`}
-            className="mx-auto mt-6 h-12"
-          />
-        )}
-      </section>
+      <ClientLogoBanner />
+      {/* Product tiles / grids follow */}
+    </>
+  );
+}
 
       <ThreeItemGrid />
       <Footer />
