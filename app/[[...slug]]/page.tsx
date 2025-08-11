@@ -1,37 +1,19 @@
 // app/[[...slug]]/page.tsx
 
+import ClientLogoBanner from 'components/layout/client-logo-banner';
 import { ThreeItemGrid } from 'components/grid/three-items';
 import Footer from 'components/layout/footer';
-import { getClientConfig } from 'lib/get-client-config';
 
 export const metadata = {
   description:
-    'High‑performance ecommerce store built with Next.js, Vercel, and Shopify.',
+    'High-performance ecommerce store built with Next.js, Vercel, and Shopify.',
   openGraph: { type: 'website' }
 };
 
-export default async function PageWrapper() {
-  const client = await getClientConfig();
-
-  const title = client?.name ?? 'Filament Farm MFG';
-  const tagline = `Custom 3D printing, storefronts, and fulfillment for ${
-    client?.name || 'miniature creators'
-  }`;
-
+export default async function HomePage() {
   return (
     <>
-      <section className="px-6 py-10 text-center">
-        <h1 className="text-4xl font-bold text-[var(--text-color)] sm:text-6xl">{title}</h1>
-        <p className="mt-4 text-lg opacity-80 text-[var(--text-color)]">{tagline}</p>
-        {client?.logoUrl && (
-          <img
-            src={client.logoUrl}
-            alt={`${client.name} logo`}
-            className="mx-auto mt-6 h-12"
-          />
-        )}
-      </section>
-
+      <ClientLogoBanner />
       <ThreeItemGrid />
       <Footer />
     </>

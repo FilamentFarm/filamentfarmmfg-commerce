@@ -17,7 +17,7 @@ export type ClientConfig = {
 export const CLIENT_CONFIGS: Record<string, ClientConfig> = {
   kongclave: {
     name: "Kongclave Miniatures",
-    logoUrl: "/clients/kongclave/logo.svg",
+    logoUrl: "/logos/kongclave.png",
     theme: {
       primaryColor: "#121212",
       backgroundColor: "#202020",
@@ -31,7 +31,7 @@ export const CLIENT_CONFIGS: Record<string, ClientConfig> = {
 
   monstersinc: {
     name: "Monsters Inc.",
-    logoUrl: "/clients/monstersinc/logo.svg",
+    logoUrl: "/logos/monsters inc logo.png',", // served from /public
     theme: {
       primaryColor: "#045B5D",
       backgroundColor: "#575757",
