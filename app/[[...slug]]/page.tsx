@@ -21,8 +21,8 @@ export default async function PageWrapper() {
   return (
     <>
       <section className="px-6 py-10 text-center">
-        <h1 className="text-4xl font-bold text-white sm:text-6xl">{title}</h1>
-        <p className="mt-4 text-lg text-gray-300">{tagline}</p>
+        <h1 className="text-4xl font-bold text-[var(--text-color)] sm:text-6xl">{title}</h1>
+        <p className="mt-4 text-lg opacity-80 text-[var(--text-color)]">{tagline}</p>
         {client?.logoUrl && (
           <img
             src={client.logoUrl}
