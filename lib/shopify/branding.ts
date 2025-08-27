@@ -14,10 +14,8 @@ export type Branding = {
   logoLight?: BrandImage | null;
   logoDark?: BrandImage | null;
   banner?: BrandImage | null;
-  logoMaxWidthVw?: number | null; // if you added this earlier
-  allProductsCollectionHandle?: string | null; // NEW
-  about?: string | null;        // NEW (plain text)
-  disclaimer?: string | null;   // NEW (plain text)
+  // NEW: editable in Shopify (Single line text; number in vw)
+  logoMaxWidthVw?: number | null;
   colors?: {
     background?: string | null;
     text?: string | null;
@@ -27,7 +25,6 @@ export type Branding = {
   };
 };
 
-// Build a key->field map from metaobject.fields
 function fieldMap(meta: any): Record<string, any> {
   const map: Record<string, any> = {};
   for (const f of meta?.fields ?? []) map[f.key] = f;
@@ -38,6 +35,7 @@ function asImage(ref: any): BrandImage | null {
   const img = ref?.image;
   return img?.url ? { url: img.url, alt: img.altText, width: img.width, height: img.height } : null;
 }
+
 function clamp(n: number, min: number, max: number) {
   return Math.max(min, Math.min(max, n));
 }
@@ -53,7 +51,7 @@ export async function getBrandingByHandle(handle: string): Promise<Branding | nu
 
   const m = fieldMap(meta);
 
-  // Optional numeric control for logo width in vw
+  // Parse the optional logo_max_width_vw field (expecting e.g. "60")
   let logoMaxWidthVw: number | null = null;
   if (m.logo_max_width_vw?.value != null) {
     const n = Number(m.logo_max_width_vw.value);
@@ -66,9 +64,6 @@ export async function getBrandingByHandle(handle: string): Promise<Branding | nu
     logoDark: asImage(m.logo_dark?.reference) ?? null,
     banner: asImage(m.banner?.reference) ?? null,
     logoMaxWidthVw,
-    allProductsCollectionHandle: m.all_products_collection_handle?.value ?? null, // NEW
-    about: m.about?.value ?? null,               // NEW
-    disclaimer: m.disclaimer?.value ?? null,     // NEW
     colors: {
       background: m.background_color?.value ?? null,
       text: m.text_color?.value ?? null,
