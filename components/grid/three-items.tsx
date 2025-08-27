@@ -1,3 +1,4 @@
+// components/grid/three-items.tsx
 import { GridTileImage } from 'components/grid/tile';
 import { getClientConfig } from 'lib/get-client-config';
 import { getCollectionProducts } from 'lib/shopify';
@@ -13,25 +14,27 @@ function ThreeItemGridItem({
   size: 'full' | 'half';
   priority?: boolean;
 }) {
+  const img = item.featuredImage;
+
   return (
-    <div
-      className={
-        size === 'full' ? 'md:col-span-4 md:row-span-2' : 'md:col-span-2 md:row-span-1'
-      }
-    >
+    <div className={size === 'full' ? 'md:col-span-4 md:row-span-2' : 'md:col-span-2 md:row-span-1'}>
       <Link
-        className="relative block aspect-square h-full w-full"
         href={`/product/${item.handle}`}
         prefetch={true}
+        // ⬇️ Remove forced square/height so intrinsic sizing can work
+        className="relative block w-full"
       >
         <GridTileImage
-          src={item.featuredImage.url}
-          fill
+          src={img.url}
+          alt={img.altText ?? item.title}
+          // ⬇️ Pass real dimensions to enable intrinsic mode
+          width={img.width}
+          height={img.height}
+          // Keep sizes logic — can be tuned later if desired
           sizes={
             size === 'full' ? '(min-width: 768px) 66vw, 100vw' : '(min-width: 768px) 33vw, 100vw'
           }
           priority={priority}
-          alt={item.title}
           label={{
             position: size === 'full' ? 'center' : 'bottom',
             title: item.title,
@@ -52,8 +55,10 @@ export async function ThreeItemGrid() {
   if (!products.length) return null;
 
   return (
-    <section className="mx-auto grid max-w-(--breakpoint-2xl) gap-4 px-4 pb-4 md:grid-cols-6 md:grid-rows-2 lg:max-h-[calc(100vh-200px)]">
-
+    <section
+      className="mx-auto grid max-w-(--breakpoint-2xl) gap-4 px-4 pb-4 md:grid-cols-6 md:grid-rows-2"
+      // Note: we removed the previous lg:max-h limit so content can size to images.
+    >
       {products[0] && (
         <ThreeItemGridItem size="full" item={products[0]} priority={true} />
       )}
