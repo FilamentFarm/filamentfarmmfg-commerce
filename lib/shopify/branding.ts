@@ -1,6 +1,6 @@
 // lib/shopify/branding.ts
 import { BRANDING_QUERY } from './queries/branding';
-import { shopifyFetch } from './index'; // uses existing fetch util/env token
+import { shopifyFetch } from './index';
 
 export type BrandImage = {
   url: string;
@@ -23,18 +23,14 @@ export type Branding = {
   };
 };
 
-function fieldMap(meta: any): Record<string, any> {
-  const map: Record<string, any> = {};
-  for (const f of meta?.fields ?? []) {
-    map[f.key] = f;
-  }
-  return map;
+function mapFields(meta: any): Record<string, any> {
+  const m: Record<string, any> = {};
+  for (const f of meta?.fields ?? []) m[f.key] = f;
+  return m;
 }
-
 function asImage(ref: any): BrandImage | null {
   const img = ref?.image;
-  if (!img?.url) return null;
-  return { url: img.url, alt: img.altText, width: img.width, height: img.height };
+  return img?.url ? { url: img.url, alt: img.altText, width: img.width, height: img.height } : null;
 }
 
 export async function getBrandingByHandle(handle: string): Promise<Branding | null> {
@@ -44,18 +40,19 @@ export async function getBrandingByHandle(handle: string): Promise<Branding | nu
   });
   const meta = data?.metaobject;
   if (!meta) return null;
-  const m = fieldMap(meta);
+
+  const f = mapFields(meta);
   return {
-    brandName: m.brand_name?.value ?? null,
-    logoLight: asImage(m.logo_light?.reference) ?? null,
-    logoDark: asImage(m.logo_dark?.reference) ?? null,
-    banner: asImage(m.banner?.reference) ?? null,
+    brandName: f.brand_name?.value ?? null,
+    logoLight: asImage(f.logo_light?.reference) ?? null,
+    logoDark: asImage(f.logo_dark?.reference) ?? null,
+    banner: asImage(f.banner?.reference) ?? null,
     colors: {
-      background: m.background_color?.value ?? null,
-      text: m.text_color?.value ?? null,
-      accent: m.accent_color?.value ?? null,
-      productButton: m.product_button_color?.value ?? null,
-      productButtonHover: m.product_button_hover_color?.value ?? null
+      background: f.background_color?.value ?? null,
+      text: f.text_color?.value ?? null,
+      accent: f.accent_color?.value ?? null,
+      productButton: f.product_button_color?.value ?? null,
+      productButtonHover: f.product_button_hover_color?.value ?? null
     }
   };
 }
