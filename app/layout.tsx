@@ -30,12 +30,15 @@ export default async function Layout({
 }) {
   const cart = getCart();
   const client = await getClientConfig();
-
+  const cfg = await getClientConfig();
   const backgroundColor = client?.theme?.backgroundColor ?? '#ffffff';
   const textColor = client?.theme?.textColor ?? '#000000';
   const accentColor = client?.theme?.primaryColor ?? '#00ff00';
   const productButtonColor = client?.theme?.productButtonColor ?? accentColor;
   const productButtonHoverColor = client?.theme?.productButtonHoverColor ?? '#333333';
+
+  const brandLogo = cfg?.branding?.logoLight?.url ?? cfg?.logoUrl ?? '';
+  const brandName = cfg?.name ?? 'Filament Farm MFG';
 
   return (
     <html lang="en" className={GeistSans.variable}>
@@ -47,9 +50,8 @@ export default async function Layout({
           '--product-button': productButtonColor,
           '--product-button-hover': productButtonHoverColor
         } as React.CSSProperties}
-        data-brand-logo={client?.branding?.logoLight?.url ?? client?.logoUrl ?? ''}
-        data-brand-name={client?.name ?? 'Filament Farm MFG'}
-        className="bg-[var(--bg-color)] text-[var(--text-color)] selection:bg-[var(--accent-color)]"
+        ata-brand-logo={brandLogo}
+        data-brand-name={brandName}
       >
         <CartProvider cartPromise={cart}>
           <Navbar />
