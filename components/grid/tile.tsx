@@ -21,6 +21,8 @@ type GridTileImageProps = {
   width?: number;
   height?: number;
   label?: LabelData;
+  // NEW: used by gallery thumbnails to indicate selection
+  active?: boolean;
 };
 
 export function GridTileImage({
@@ -32,7 +34,8 @@ export function GridTileImage({
   fill,
   width,
   height,
-  label
+  label,
+  active
 }: GridTileImageProps) {
   const hasIntrinsic = Boolean(width && height) && !fill;
 
@@ -40,11 +43,14 @@ export function GridTileImage({
     <div
       className={[
         'relative overflow-hidden rounded-2xl bg-[var(--bg-color)]',
+        // highlight when active (used in product gallery)
+        active ? 'ring-2 ring-offset-2 ring-[var(--accent-color)] ring-offset-[var(--bg-color)]' : '',
         // Only force a square when we don't know the image ratio
         hasIntrinsic ? '' : 'aspect-square',
         className
       ].join(' ')}
       style={hasIntrinsic ? { aspectRatio: `${width}/${height}` } : undefined}
+      aria-current={active ? 'true' : undefined}
     >
       {hasIntrinsic ? (
         <Image
