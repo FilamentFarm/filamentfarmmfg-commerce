@@ -15,6 +15,10 @@ export default function MobileMenu({ menu }: { menu: Menu[] }) {
   const [isOpen, setIsOpen] = useState(false);
   const openMobileMenu = () => setIsOpen(true);
   const closeMobileMenu = () => setIsOpen(false);
+  const links = [
+  { title: 'All products', href: '/catalog' },
+  { title: 'About', href: '/about' }
+];
 
   useEffect(() => {
     const handleResize = () => {
