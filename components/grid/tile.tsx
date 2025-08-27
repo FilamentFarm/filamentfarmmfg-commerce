@@ -1,15 +1,26 @@
 // components/grid/tile.tsx
 import Image from 'next/image';
-import { cn } from '@/lib/utils'; // if you already have a cn utility
+import Label from 'components/label';
+
+type LabelData = {
+  position?: 'bottom' | 'center';
+  title: string;
+  amount: string;
+  currencyCode: string;
+};
 
 type GridTileImageProps = {
   src: string;
   alt: string;
   className?: string;
   priority?: boolean;
-  // NEW: pass these to enable intrinsic layout
+  sizes?: string;
+  // legacy/fallback mode
+  fill?: boolean;
+  // intrinsic mode
   width?: number;
   height?: number;
+  label?: LabelData;
 };
 
 export function GridTileImage({
@@ -17,33 +28,53 @@ export function GridTileImage({
   alt,
   className = '',
   priority,
+  sizes,
+  fill,
   width,
-  height
+  height,
+  label
 }: GridTileImageProps) {
-  const hasIntrinsic = Boolean(width && height);
+  const hasIntrinsic = Boolean(width && height) && !fill;
 
   return (
     <div
-      className={cn(
-        // remove any fixed height here; let content define height
+      className={[
         'relative overflow-hidden rounded-2xl bg-[var(--bg-color)]',
-        // keep square fallback if we don’t have dimensions
+        // Only force a square when we don't know the image ratio
         hasIntrinsic ? '' : 'aspect-square',
         className
-      )}
-      // optional: if you’d like, you can set explicit aspect-ratio too
-      style={hasIntrinsic ? { aspectRatio: `${width} / ${height}` } : undefined}
+      ].join(' ')}
+      style={hasIntrinsic ? { aspectRatio: `${width}/${height}` } : undefined}
     >
-      <Image
-        src={src}
-        alt={alt}
-        // With width/height provided, Next auto uses an intrinsic, responsive layout
-        width={width ?? 1200}
-        height={height ?? 1200}
-        priority={priority}
-        className="block h-auto w-full object-contain"
-        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-      />
+      {hasIntrinsic ? (
+        <Image
+          src={src}
+          alt={alt}
+          width={width!}
+          height={height!}
+          priority={priority}
+          sizes={sizes}
+          className="block h-auto w-full object-contain"
+        />
+      ) : (
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          priority={priority}
+          sizes={sizes}
+          className="object-contain"
+        />
+      )}
+
+      {label ? (
+        <Label
+          title={label.title}
+          amount={label.amount}
+          currencyCode={label.currencyCode}
+          position={label.position}
+        />
+      ) : null}
     </div>
   );
 }
