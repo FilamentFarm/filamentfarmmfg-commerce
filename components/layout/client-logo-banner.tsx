@@ -5,7 +5,26 @@ export default async function ClientLogoBanner() {
   const cfg = await getClientConfig();
   const logoUrl = cfg?.logoUrl ?? '';
   const alt = cfg?.name ? `${cfg.name} logo` : 'Client logo';
+  const banner = cfg?.branding?.banner;
 
+  if (banner?.url) {
+  return (
+    <div className="w-full bg-[var(--accent-color)]">
+      <div className="mx-auto max-w-screen-2xl">
+        <Image
+          src={banner.url}
+          alt={banner.alt ?? `${cfg?.name ?? 'Client'} banner`}
+          width={banner.width ?? 1600}
+          height={banner.height ?? 600}
+          priority
+          className="h-auto w-full object-contain"
+          sizes="100vw"
+        />
+      </div>
+    </div>
+  );
+}
+// else continue with your existing logo rendering...
   return (
     <div className="w-full bg-[var(--accent-color)]">
       {/* The inner container height controls the bar height; the image scales to fit */}
