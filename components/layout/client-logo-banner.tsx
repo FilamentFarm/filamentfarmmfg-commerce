@@ -1,43 +1,60 @@
+// components/layout/client-logo-banner.tsx
 import Image from 'next/image';
-import { getClientConfig } from '@/lib/get-client-config';
+import { getClientConfig } from 'lib/get-client-config';
+
+function clamp(n: number, min: number, max: number) {
+  return Math.max(min, Math.min(max, n));
+}
 
 export default async function ClientLogoBanner() {
   const cfg = await getClientConfig();
-  const logoUrl = cfg?.logoUrl ?? '';
-  const alt = cfg?.name ? `${cfg.name} logo` : 'Client logo';
-  const banner = cfg?.branding?.banner;
 
-  if (banner?.url) {
-  return (
-    <div className="w-full bg-[var(--accent-color)]">
-      <div className="mx-auto max-w-screen-2xl">
-        <Image
-          src={banner.url}
-          alt={banner.alt ?? `${cfg?.name ?? 'Client'} banner`}
-          width={banner.width ?? 1600}
-          height={banner.height ?? 600}
-          priority
-          className="h-auto w-full object-contain"
-          sizes="100vw"
-        />
-      </div>
-    </div>
+  // Prefer Shopify metaobject logo, fallback to code config logoUrl
+  const metaLogo = cfg?.branding?.logoLight;
+  const logo = metaLogo?.url
+    ? {
+        url: metaLogo.url,
+        alt: metaLogo.alt ?? `${cfg?.name ?? 'Client'} logo`,
+        width: metaLogo.width ?? 800,
+        height: metaLogo.height ?? 200
+      }
+    : cfg?.logoUrl
+    ? {
+        url: cfg.logoUrl,
+        alt: cfg?.logoAlt ?? `${cfg?.name ?? 'Client'} logo`,
+        width: 800,
+        height: 200
+      }
+    : null;
+
+  // Editable in Shopify → Branding.metaobject field: logo_max_width_vw (20–100)
+  const maxWidthVw = clamp(
+    Number((cfg as any)?.branding?.logoMaxWidthVw ?? (cfg as any)?.branding?.logo_max_width_vw ?? 90),
+    20,
+    100
   );
-}
-// else continue with your existing logo rendering...
+
+  // sizes hint for Next/Image (smaller on mobile, moderate on tablet, tighter on desktop)
+  const sizes =
+    `(max-width: 768px) ${Math.min(maxWidthVw, 90)}vw, ` +
+    `(max-width: 1280px) ${Math.min(maxWidthVw, 60)}vw, ` +
+    `${Math.min(maxWidthVw, 40)}vw`;
+
   return (
     <div className="w-full bg-[var(--accent-color)]">
-      {/* The inner container height controls the bar height; the image scales to fit */}
-      <div className="mx-auto max-w-screen-2xl flex h-14 sm:h-25 md:h-30 lg:h-35 items-center justify-center">
-        {logoUrl ? (
+      {/* No fixed height: bar height follows image height */}
+      <div className="mx-auto max-w-screen-2xl flex items-center justify-center">
+        {logo ? (
           <Image
-            src={logoUrl}
-            alt={alt}
-            width={800}
-            height={200}
+            src={logo.url}
+            alt={logo.alt}
+            width={logo.width}
+            height={logo.height}
             priority
-            className="max-h-full w-auto"
-            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 800px"
+            className="h-auto w-auto"
+            sizes={sizes}
+            // Limit visual width using vw from Shopify; intrinsic ratio preserves height
+            style={{ maxWidth: `${maxWidthVw}vw` }}
           />
         ) : (
           <span className="text-[var(--bg-color)]/90 text-lg sm:text-xl md:text-2xl font-semibold">
@@ -47,6 +64,4 @@ export default async function ClientLogoBanner() {
       </div>
     </div>
   );
-
-  
 }
