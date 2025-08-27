@@ -34,25 +34,27 @@ function asImage(ref: any): BrandImage | null {
 }
 
 export async function getBrandingByHandle(handle: string): Promise<Branding | null> {
-  const { data } = await shopifyFetch({
+  const resp = await shopifyFetch({
     query: BRANDING_QUERY,
     variables: { type: 'branding', handle }
   });
-  const meta = data?.metaobject;
+
+  // Your fetch helper returns { status, body }
+  const meta = (resp as any)?.body?.data?.metaobject;
   if (!meta) return null;
 
-  const f = mapFields(meta);
+  const m = fieldMap(meta);
   return {
-    brandName: f.brand_name?.value ?? null,
-    logoLight: asImage(f.logo_light?.reference) ?? null,
-    logoDark: asImage(f.logo_dark?.reference) ?? null,
-    banner: asImage(f.banner?.reference) ?? null,
+    brandName: m.brand_name?.value ?? null,
+    logoLight: asImage(m.logo_light?.reference) ?? null,
+    logoDark: asImage(m.logo_dark?.reference) ?? null,
+    banner: asImage(m.banner?.reference) ?? null,
     colors: {
-      background: f.background_color?.value ?? null,
-      text: f.text_color?.value ?? null,
-      accent: f.accent_color?.value ?? null,
-      productButton: f.product_button_color?.value ?? null,
-      productButtonHover: f.product_button_hover_color?.value ?? null
+      background: m.background_color?.value ?? null,
+      text: m.text_color?.value ?? null,
+      accent: m.accent_color?.value ?? null,
+      productButton: m.product_button_color?.value ?? null,
+      productButtonHover: m.product_button_hover_color?.value ?? null
     }
   };
 }
