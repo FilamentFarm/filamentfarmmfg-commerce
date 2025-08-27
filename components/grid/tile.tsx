@@ -1,41 +1,78 @@
-import clsx from 'clsx';
+// components/grid/tile.tsx
 import Image from 'next/image';
-import Label from '../label';
+import Label from 'components/label';
+
+type LabelData = {
+  position?: 'bottom' | 'center';
+  title: string;
+  amount: string;
+  currencyCode: string;
+};
+
+type GridTileImageProps = {
+  src: string;
+  alt: string;
+  className?: string;
+  priority?: boolean;
+  sizes?: string;
+  // legacy/fallback mode
+  fill?: boolean;
+  // intrinsic mode
+  width?: number;
+  height?: number;
+  label?: LabelData;
+  // NEW: used by gallery thumbnails to indicate selection
+  active?: boolean;
+};
 
 export function GridTileImage({
-  isInteractive = true,
-  active,
+  src,
+  alt,
+  className = '',
+  priority,
+  sizes,
+  fill,
+  width,
+  height,
   label,
-  ...props
-}: {
-  isInteractive?: boolean;
-  active?: boolean;
-  label?: {
-    title: string;
-    amount: string;
-    currencyCode: string;
-    position?: 'bottom' | 'center';
-  };
-} & React.ComponentProps<typeof Image>) {
+  active
+}: GridTileImageProps) {
+  const hasIntrinsic = Boolean(width && height) && !fill;
+
   return (
     <div
-      className={clsx(
-        'group flex h-full w-full items-center justify-center overflow-hidden rounded-lg border bg-white hover:border-blue-600 dark:bg-black',
-        {
-          relative: label,
-          'border-2 border-blue-600': active,
-          'border-neutral-200 dark:border-neutral-800': !active
-        }
-      )}
+      className={[
+        'relative overflow-hidden rounded-2xl bg-[var(--bg-color)]',
+        // highlight when active (used in product gallery)
+        active ? 'ring-2 ring-offset-2 ring-[var(--accent-color)] ring-offset-[var(--bg-color)]' : '',
+        // Only force a square when we don't know the image ratio
+        hasIntrinsic ? '' : 'aspect-square',
+        className
+      ].join(' ')}
+      style={hasIntrinsic ? { aspectRatio: `${width}/${height}` } : undefined}
+      aria-current={active ? 'true' : undefined}
     >
-      {props.src ? (
+      {hasIntrinsic ? (
         <Image
-          className={clsx('relative h-full w-full object-contain', {
-            'transition duration-300 ease-in-out group-hover:scale-105': isInteractive
-          })}
-          {...props}
+          src={src}
+          alt={alt}
+          width={width!}
+          height={height!}
+          priority={priority}
+          sizes={sizes}
+          className="block h-auto w-full object-contain"
         />
-      ) : null}
+      ) : (
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          priority={priority}
+          sizes={sizes}
+          className="object-contain"
+        />
+      )}
+
       {label ? (
         <Label
           title={label.title}
