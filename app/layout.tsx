@@ -47,8 +47,8 @@ export default async function Layout({
           '--product-button': productButtonColor,
           '--product-button-hover': productButtonHoverColor
         } as React.CSSProperties}
-        data-brand-logo={cfg?.branding?.logoLight?.url ?? cfg?.logoUrl ?? ''}
-        data-brand-name={cfg?.name ?? 'Filament Farm MFG'}
+        data-brand-logo={client?.branding?.logoLight?.url ?? client?.logoUrl ?? ''}
+        data-brand-name={client?.name ?? 'Filament Farm MFG'}
         className="bg-[var(--bg-color)] text-[var(--text-color)] selection:bg-[var(--accent-color)]"
       >
         <CartProvider cartPromise={cart}>
