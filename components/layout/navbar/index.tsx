@@ -1,3 +1,4 @@
+import BrandHomeButton from './brand-home-button';
 import CartModal from 'components/cart/modal';
 import LogoSquare from 'components/logo-square';
 import { getMenu } from 'lib/shopify';
@@ -21,16 +22,13 @@ export async function Navbar() {
       </div>
       <div className="flex w-full items-center">
         <div className="flex w-full md:w-1/3">
-          <Link
-            href="/"
-            prefetch={true}
-            className="mr-2 flex w-full items-center justify-center md:w-auto lg:mr-6"
-          >
-            <LogoSquare />
-            <div className="ml-2 flex-none text-sm font-medium uppercase md:hidden lg:block">
-              {SITE_NAME}
-            </div>
-          </Link>
+          
+          <div className="flex items-center gap-3">
+            <BrandHomeButton />
+          </div>
+
+
+
           {menu.length ? (
             <ul className="hidden gap-6 text-sm md:flex md:items-center">
               {menu.map((item: Menu) => (
