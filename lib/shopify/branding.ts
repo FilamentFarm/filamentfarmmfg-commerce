@@ -23,11 +23,15 @@ export type Branding = {
   };
 };
 
-function mapFields(meta: any): Record<string, any> {
-  const m: Record<string, any> = {};
-  for (const f of meta?.fields ?? []) m[f.key] = f;
-  return m;
+// Build a key->field map from metaobject.fields
+function fieldMap(meta: any): Record<string, any> {
+  const map: Record<string, any> = {};
+  for (const f of meta?.fields ?? []) {
+    map[f.key] = f;
+  }
+  return map;
 }
+
 function asImage(ref: any): BrandImage | null {
   const img = ref?.image;
   return img?.url ? { url: img.url, alt: img.altText, width: img.width, height: img.height } : null;
@@ -39,11 +43,11 @@ export async function getBrandingByHandle(handle: string): Promise<Branding | nu
     variables: { type: 'branding', handle }
   });
 
-  // Your fetch helper returns { status, body }
   const meta = (resp as any)?.body?.data?.metaobject;
   if (!meta) return null;
 
   const m = fieldMap(meta);
+
   return {
     brandName: m.brand_name?.value ?? null,
     logoLight: asImage(m.logo_light?.reference) ?? null,
