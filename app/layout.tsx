@@ -1,57 +1,62 @@
-// app/layout.tsx
-import './globals.css';
-import type { Metadata } from 'next';
-import React from 'react';
-
+import { CartProvider } from 'components/cart/cart-context';
+import { Navbar } from 'components/layout/navbar';
+//import { WelcomeToast } from 'components/welcome-toast';
+import { GeistSans } from 'geist/font/sans';
+import { getCart } from 'lib/shopify';
 import { getClientConfig } from 'lib/get-client-config';
-import Navbar from 'components/layout/navbar';
-import Footer from 'components/layout/footer';
+import { ReactNode } from 'react';
+import { Toaster } from 'sonner';
+import './globals.css';
+import { baseUrl } from 'lib/utils';
 
-export const metadata: Metadata = {
-  title: 'Filament Farm Storefront',
-  description: 'Headless Shopify storefront'
+const { SITE_NAME } = process.env;
+
+export const metadata = {
+  metadataBase: new URL(baseUrl),
+  title: {
+    default: SITE_NAME!,
+    template: `%s | ${SITE_NAME}`
+  },
+  robots: {
+    follow: true,
+    index: true
+  }
 };
 
-export default async function RootLayout({
+export default async function Layout({
   children
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
-  // Load client config (theme + branding)
-  const cfg = await getClientConfig();
+  const cart = getCart();
+  const client = await getClientConfig();
 
-  const theme = cfg?.theme ?? {};
-  const backgroundColor = theme.backgroundColor ?? '#0B0B0B';
-  const textColor = theme.textColor ?? '#FFFFFF';
-  const accentColor = theme.accentColor ?? '#8B5CF6';
-  const productButtonColor = theme.productButtonColor ?? accentColor;
-  const productButtonHoverColor = theme.productButtonHoverColor ?? accentColor;
-
-  // Brand object passed to Navbar/Footer
-  const brand = {
-    name: cfg?.name ?? 'Store',
-    logoUrl: cfg?.branding?.logoLight?.url ?? cfg?.logoUrl ?? '',
-    homeHref: '/' // keep home link root; subdomain theming handled in middleware
-  };
+  const backgroundColor = client?.theme?.backgroundColor ?? '#ffffff';
+  const textColor = client?.theme?.textColor ?? '#000000';
+  const accentColor = client?.theme?.primaryColor ?? '#00ff00';
+  const productButtonColor = client?.theme?.productButtonColor ?? accentColor;
+  const productButtonHoverColor = client?.theme?.productButtonHoverColor ?? '#333333';
 
   return (
-    <html lang="en">
+    <html lang="en" className={GeistSans.variable}>
       <body
-        className="min-h-screen bg-[var(--bg-color)] text-[var(--text-color)] antialiased"
-        style={
-          {
-            // Theme CSS variables
-            ['--bg-color' as any]: backgroundColor,
-            ['--text-color' as any]: textColor,
-            ['--accent-color' as any]: accentColor,
-            ['--product-button' as any]: productButtonColor,
-            ['--product-button-hover' as any]: productButtonHoverColor
-          } as React.CSSProperties
-        }
+        style={{
+          '--bg-color': backgroundColor,
+          '--text-color': textColor,
+          '--accent-color': accentColor,
+          '--product-button': productButtonColor,
+          '--product-button-hover': productButtonHoverColor
+        } as React.CSSProperties}
+        className="bg-[var(--bg-color)] text-[var(--text-color)] selection:bg-[var(--accent-color)]"
       >
-        <Navbar brand={brand} />
-        {children}
-        <Footer brand={brand} />
+        <CartProvider cartPromise={cart}>
+          <Navbar />
+          <main>
+            {children}
+            <Toaster closeButton />
+            {/* <WelcomeToast />  */}
+          </main>
+        </CartProvider>
       </body>
     </html>
   );

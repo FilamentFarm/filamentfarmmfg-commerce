@@ -1,39 +1,42 @@
-// components/layout/footer.tsx
-import Image from 'next/image';
 import Link from 'next/link';
 
-type Brand = { name: string; logoUrl?: string; homeHref?: string };
+import FooterMenu from 'components/layout/footer-menu';
+import LogoSquare from 'components/logo-square';
+import { getMenu } from 'lib/shopify';
+import { Suspense } from 'react';
 
-export default function Footer({ brand }: { brand?: Brand }) {
-  const name = brand?.name ?? 'Store';
-  const homeHref = brand?.homeHref ?? '/';
+const { COMPANY_NAME, SITE_NAME } = process.env;
+
+export default async function Footer() {
+  const currentYear = new Date().getFullYear();
+  const copyrightDate = 2023 + (currentYear > 2023 ? `-${currentYear}` : '');
+  const skeleton = 'w-full h-6 animate-pulse rounded-sm bg-neutral-200 dark:bg-neutral-700';
+  const menu = await getMenu('next-js-frontend-footer-menu');
+  const copyrightName = COMPANY_NAME || SITE_NAME || '';
 
   return (
-    <footer className="border-t border-neutral-800 bg-[var(--bg-color)]">
-      <div className="mx-auto flex max-w-(--breakpoint-2xl) items-center justify-between px-4 py-8">
-        {/* Left: brand mark */}
-        <Link href={homeHref} className="flex items-center gap-3" prefetch>
-          {brand?.logoUrl ? (
-            <Image
-              src={brand.logoUrl}
-              alt={`${name} logo`}
-              width={120}
-              height={120}
-              className="h-8 w-auto"
-            />
-          ) : (
-            <div className="h-8 w-8 rounded bg-[var(--accent-color)]" />
-          )}
-          <span className="text-sm font-medium text-[var(--text-color)]/85">
-            {name}
-          </span>
-        </Link>
-
-        {/* Right: footer links - mirror header */}
-        <nav className="flex items-center gap-4">
-          <Link href="/catalog" className="text-sm text-[var(--text-color)]/70 hover:text-[var(--text-color)]">All products</Link>
-          <Link href="/about" className="text-sm text-[var(--text-color)]/70 hover:text-[var(--text-color)]">About</Link>
-        </nav>
+    <footer className="text-sm text-neutral-500 dark:text-neutral-400">
+      <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 border-t border-neutral-200 px-6 py-12 text-sm md:flex-row md:gap-12 md:px-4 min-[1320px]:px-0 dark:border-neutral-700">
+        <div>
+          <Link className="flex items-center gap-2 text-black md:pt-1 dark:text-white" href="/">
+            <LogoSquare size="sm" />
+            <span className="uppercase">{SITE_NAME}</span>
+          </Link>
+        </div>
+        <Suspense
+          fallback={
+            <div className="flex h-[188px] w-[200px] flex-col gap-2">
+              <div className={skeleton} />
+              <div className={skeleton} />
+              <div className={skeleton} />
+              <div className={skeleton} />
+              <div className={skeleton} />
+              <div className={skeleton} />
+            </div>
+          }
+        >
+          <FooterMenu menu={menu} />
+        </Suspense>
       </div>
     </footer>
   );

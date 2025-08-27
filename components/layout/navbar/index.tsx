@@ -1,71 +1,61 @@
-// components/layout/navbar/index.tsx
-'use client';
-import Image from 'next/image';
+import CartModal from 'components/cart/modal';
+import LogoSquare from 'components/logo-square';
+import { getMenu } from 'lib/shopify';
+import { Menu } from 'lib/shopify/types';
 import Link from 'next/link';
-import { useMemo } from 'react';
-// import LogoSquare from 'components/logo-square'; // keep as fallback if you like
+import { Suspense } from 'react';
+import MobileMenu from './mobile-menu';
+import Search, { SearchSkeleton } from './search';
 
-type Brand = { name: string; logoUrl?: string; homeHref?: string };
+const { SITE_NAME } = process.env;
 
-export default function Navbar({ brand }: { brand?: Brand }) {
-  const homeHref = brand?.homeHref ?? '/';
-  const name = brand?.name ?? 'Store';
-  const hasLogo = Boolean(brand?.logoUrl);
-
-  // Build the primary nav (drop "Home")
-  const navLinks = useMemo(
-    () => [
-      { title: 'All products', href: '/catalog' },
-      { title: 'About', href: '/about' }
-      // Add more links here if needed
-    ],
-    []
-  );
+export async function Navbar() {
+  const menu = await getMenu('next-js-frontend-header-menu');
 
   return (
-    <div className="sticky top-0 z-40 w-full border-b border-neutral-800 bg-[var(--bg-color)]/80 backdrop-blur">
-      <nav className="mx-auto flex max-w-(--breakpoint-2xl) items-center justify-between px-4 py-3">
-        {/* Left: brand */}
-        <Link href={homeHref} className="flex items-center gap-3" prefetch>
-          {hasLogo ? (
-            <Image
-              src={brand!.logoUrl!}
-              alt={`${name} logo`}
-              width={120}
-              height={120}
-              className="h-8 w-auto"
-              priority
-            />
-          ) : (
-            // <LogoSquare className="h-8 w-8" />
-            <div className="h-8 w-8 rounded bg-[var(--accent-color)]" />
-          )}
-          <span className="text-sm font-semibold text-[var(--text-color)]">
-            {name}
-          </span>
-        </Link>
-
-        {/* Right: links + cart (keep your existing cart/search components) */}
-        <div className="flex items-center gap-6">
-          <div className="hidden md:flex items-center gap-6">
-            {navLinks.map((l) => (
-              <Link
-                key={l.href}
-                href={l.href}
-                prefetch
-                className="text-sm text-[var(--text-color)]/85 hover:text-[var(--text-color)]"
-              >
-                {l.title}
-              </Link>
-            ))}
-          </div>
-
-          {/* Keep your existing Search and Cart triggers here */}
-          {/* e.g. <Search /> and <OpenCart /> */}
+    <nav className="relative flex items-center justify-between p-4 lg:px-6">
+      <div className="block flex-none md:hidden">
+        <Suspense fallback={null}>
+          <MobileMenu menu={menu} />
+        </Suspense>
+      </div>
+      <div className="flex w-full items-center">
+        <div className="flex w-full md:w-1/3">
+          <Link
+            href="/"
+            prefetch={true}
+            className="mr-2 flex w-full items-center justify-center md:w-auto lg:mr-6"
+          >
+            <LogoSquare />
+            <div className="ml-2 flex-none text-sm font-medium uppercase md:hidden lg:block">
+              {SITE_NAME}
+            </div>
+          </Link>
+          {menu.length ? (
+            <ul className="hidden gap-6 text-sm md:flex md:items-center">
+              {menu.map((item: Menu) => (
+                <li key={item.title}>
+                  <Link
+                    href={item.path}
+                    prefetch={true}
+                    className="text-neutral-500 underline-offset-4 hover:text-black hover:underline dark:text-neutral-400 dark:hover:text-neutral-300"
+                  >
+                    {item.title}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          ) : null}
         </div>
-      </nav>
-
-      {/* If you have a mobile menu component, it likely renders links; ensure it uses the same set */}
-    </div>
+        <div className="hidden justify-center md:flex md:w-1/3">
+          <Suspense fallback={<SearchSkeleton />}>
+            <Search />
+          </Suspense>
+        </div>
+        <div className="flex justify-end md:w-1/3">
+          <CartModal />
+        </div>
+      </div>
+    </nav>
   );
 }
