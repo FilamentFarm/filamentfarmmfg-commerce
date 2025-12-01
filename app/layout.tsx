@@ -39,9 +39,6 @@ export default async function Layout({
   const productButtonHoverColor =
     client?.theme?.productButtonHoverColor ?? '#333333';
 
-  const brandLogo = client?.logoUrl ?? '';
-  const brandName = client?.name ?? 'Filament Farm MFG';
-
   return (
     <html lang="en" className={GeistSans.variable}>
       <body
@@ -54,11 +51,9 @@ export default async function Layout({
             '--product-button-hover': productButtonHoverColor
           } as React.CSSProperties
         }
-        data-brand-logo={brandLogo}
-        data-brand-name={brandName}
       >
         <CartProvider cartPromise={cart}>
-          <Navbar />
+          <Navbar client={client} />
           <main>
             {children}
             <Toaster closeButton />

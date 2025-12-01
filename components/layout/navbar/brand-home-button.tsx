@@ -1,25 +1,8 @@
-'use client';
-
-import React from 'react';
+import { ClientConfig } from 'lib/client-config';
 import Link from 'next/link';
 
-function useBrandData() {
-  const [logo, setLogo] = React.useState<string | null>(null);
-  const [name, setName] = React.useState<string>('Home');
-
-  React.useEffect(() => {
-    const b = document.body;
-    const l = b.getAttribute('data-brand-logo') || '';
-    const n = b.getAttribute('data-brand-name') || 'Home';
-    setLogo(l || null);
-    setName(n);
-  }, []);
-
-  return { logo, name };
-}
-
-export default function BrandHomeButton() {
-  const { logo, name } = useBrandData();
+export default function BrandHomeButton({ client }: { client: ClientConfig }) {
+  const { logoUrl: logo, name } = client;
 
   return (
     <Link
