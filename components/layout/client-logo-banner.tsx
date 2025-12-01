@@ -9,23 +9,14 @@ function clamp(n: number, min: number, max: number) {
 export default async function ClientLogoBanner() {
   const cfg = await getClientConfig();
 
-  // Prefer Shopify metaobject logo, fallback to code config logoUrl
-  const metaLogo = cfg?.branding?.logoLight;
-  const logo = metaLogo?.url
-    ? {
-        url: metaLogo.url,
-        alt: metaLogo.alt ?? `${cfg?.name ?? 'Client'} logo`,
-        width: metaLogo.width ?? 800,
-        height: metaLogo.height ?? 200
-      }
-    : cfg?.logoUrl
+  // Use client-specific logo from config; fallback to nothing
+  const logo = cfg?.logoUrl
     ? {
         url: cfg.logoUrl,
-        alt: cfg?.logoAlt ?? `${cfg?.name ?? 'Client'} logo`,
-        width: 800,
-        height: 200
+        alt: cfg.name ?? 'Filament Farm MFG'
       }
     : null;
+
 
   // Editable in Shopify → Branding.metaobject field: logo_max_width_vw (20–100)
   const maxWidthVw = clamp(
@@ -65,3 +56,4 @@ export default async function ClientLogoBanner() {
     </div>
   );
 }
+
