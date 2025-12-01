@@ -14,6 +14,8 @@ export default async function ClientLogoBanner() {
     ? {
         url: cfg.logoUrl,
         alt: cfg.name ?? 'Filament Farm MFG'
+        width: 160,
+        height: 40
       }
     : null;
 
@@ -56,4 +58,5 @@ export default async function ClientLogoBanner() {
     </div>
   );
 }
+
 
