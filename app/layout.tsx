@@ -8,6 +8,7 @@ import { ReactNode } from 'react';
 import { Toaster } from 'sonner';
 import './globals.css';
 import { baseUrl } from 'lib/utils';
+import { ClientConfig } from 'lib/client-config';
 
 const { SITE_NAME } = process.env;
 
@@ -23,21 +24,33 @@ export const metadata = {
   }
 };
 
+const defaultClientConfig: ClientConfig = {
+  name: 'Filament Farm MFG',
+  logoUrl: '/logo.png', // A sensible default
+  shopifyCollectionHandle: 'all', // Default to all products
+  theme: {
+    primaryColor: '#000000',
+    backgroundColor: '#ffffff',
+    textColor: '#000000'
+  }
+};
+
 export default async function Layout({
   children
 }: {
   children: ReactNode;
 }) {
   const cart = getCart();
-  const client = await getClientConfig();
+  const clientFromConfig = await getClientConfig();
+  const client = clientFromConfig || defaultClientConfig;
 
-  const backgroundColor = client?.theme?.backgroundColor ?? '#ffffff';
-  const textColor = client?.theme?.textColor ?? '#000000';
-  const accentColor = client?.theme?.primaryColor ?? '#00ff00';
+  const backgroundColor = client.theme.backgroundColor;
+  const textColor = client.theme.textColor;
+  const accentColor = client.theme.primaryColor;
   const productButtonColor =
-    client?.theme?.productButtonColor ?? accentColor;
+    client.theme.productButtonColor ?? accentColor;
   const productButtonHoverColor =
-    client?.theme?.productButtonHoverColor ?? '#333333';
+    client.theme.productButtonHoverColor ?? '#333333';
 
   return (
     <html lang="en" className={GeistSans.variable}>
