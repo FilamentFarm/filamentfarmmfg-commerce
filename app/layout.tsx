@@ -69,5 +69,3 @@ export default async function Layout({
     </html>
   );
 }
-  );
-}
