@@ -20,15 +20,19 @@ export default async function SearchPage(props: {
   const clientConfig = await getClientConfig();
 
   if (!clientConfig) {
-    return notFound(); // Or a more graceful error page
+    console.log('DEBUG: clientConfig is null, returning notFound().');
+    return notFound();
   }
 
+  console.log('DEBUG: clientConfig loaded:', clientConfig);
   const products = await getCollectionProducts({
     collection: clientConfig.shopifyCollectionHandle,
     sortKey,
     reverse,
     query: searchValue || undefined
   });
+
+  console.log('DEBUG: Products fetched:', products);
 
   const resultsText = products.length > 1 ? 'results' : 'result';
 
