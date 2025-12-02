@@ -22,7 +22,7 @@ async function TagList() {
     { title: 'All', path: '/search/all' },
     ...uniqueTags.map((tag) => ({
       title: tag,
-      path: `/search/${tag}`
+      path: `/search/${encodeURIComponent(tag)}`
     }))
   ];
 

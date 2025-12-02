@@ -16,7 +16,8 @@ export async function generateMetadata(props: {
   if (!clientConfig) return notFound();
 
   const clientCollectionHandle = clientConfig.shopifyCollectionHandle;
-  const currentTag = params.collection === 'all' ? null : params.collection;
+  const decodedTag = decodeURIComponent(params.collection);
+  const currentTag = decodedTag === 'all' || decodedTag === clientCollectionHandle ? null : decodedTag;
 
   const collection = await getCollection(clientCollectionHandle);
 
@@ -46,7 +47,8 @@ export default async function SearchPage(props: {
   if (!clientConfig) return notFound();
 
   const clientCollectionHandle = clientConfig.shopifyCollectionHandle;
-  const currentTag = params.collection === 'all' ? null : params.collection;
+  const decodedTag = decodeURIComponent(params.collection);
+  const currentTag = decodedTag === 'all' || decodedTag === clientCollectionHandle ? null : decodedTag;
 
   const { sort } = (searchParams || {}) as { [key: string]: string };
   const { sortKey, reverse } = sorting.find((item) => item.slug === sort) || defaultSort;
