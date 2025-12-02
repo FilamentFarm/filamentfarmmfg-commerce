@@ -18,15 +18,15 @@ export default async function Footer() {
 
   return (
     <footer className="text-sm text-neutral-500 dark:text-neutral-400">
-      <div className="mx-auto w-full max-w-7xl flex-col gap-6 border-t border-neutral-200 px-6 pt-12 pb-6 text-sm md:flex-row md:gap-12 md:px-4 min-[1320px]:px-0 dark:border-neutral-700">
+      <div className="mx-auto w-full max-w-7xl flex-col gap-6 border-t border-neutral-200 px-6 pt-6 pb-6 text-sm md:flex-row md:gap-12 md:px-4 min-[1320px]:px-0 dark:border-neutral-700">
         {/* New text line, displayed only if clientConfig exists (i.e., on a client subdomain) */}
         {clientConfig && (
-          <div className="w-full text-center text-neutral-600 dark:text-neutral-300 text-base md:text-lg mb-6">
+          <div className="w-full text-center text-neutral-600 dark:text-neutral-300 text-base md:text-lg mb-4">
             This maker uses Filament Farm MFG to host and manufacture their products.
           </div>
         )}
 
-        <div className="flex w-full flex-col md:flex-row justify-between pt-6">
+        <div className="flex w-full flex-col md:flex-row justify-between pt-4">
           <div className="flex items-center flex-wrap gap-x-2">
             {/* Client name in partnership with Filament Farm MFG */}
             {clientConfig && (
@@ -58,15 +58,6 @@ export default async function Footer() {
       </div>
 
       <div className="mx-auto w-full max-w-7xl border-t border-neutral-200 px-6 py-4 text-center text-sm text-neutral-500 dark:border-neutral-700 dark:text-neutral-400">
-        <a
-          className="mr-2 text-black dark:text-white"
-          href="https://vercel.com"
-          aria-label="Vercel.com Link"
-          target="_blank"
-          rel="noreferrer"
-        >
-          Powered by Vercel
-        </a>
         <span>&copy; {copyrightDate} {copyrightName}.</span>
       </div>
     </footer>
