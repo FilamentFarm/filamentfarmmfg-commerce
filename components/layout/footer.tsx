@@ -19,12 +19,6 @@ export default async function Footer() {
   return (
     <footer className="text-sm text-neutral-500 dark:text-neutral-400">
       <div className="mx-auto w-full max-w-7xl flex-col gap-6 border-t border-neutral-200 px-6 pt-12 pb-6 text-sm md:flex-row md:gap-12 md:px-4 min-[1320px]:px-0 dark:border-neutral-700">
-        {/* New text line, displayed only if clientConfig exists (i.e., on a client subdomain) */}
-        {clientConfig && (
-          <div className="w-full text-center text-neutral-600 dark:text-neutral-300 text-base md:text-lg mb-6">
-            This maker uses Filament Farm MFG to host and manufacture their products.
-          </div>
-        )}
 
         <div className="flex w-full flex-col md:flex-row justify-between pt-6">
           <div className="flex items-center flex-wrap gap-x-2">
@@ -39,7 +33,7 @@ export default async function Footer() {
               <img
                 src="/logos/filamentfarmmfg-logo.png" // Assumed path for your custom logo
                 alt="Filament Farm MFG logo"
-                className="h-8 w-auto rounded-lg"
+                className="h-6 w-auto rounded-lg"
               />
               <span className="uppercase">Filament Farm MFG</span>
             </Link>
@@ -55,6 +49,13 @@ export default async function Footer() {
             </Link>
           </div>
         </div>
+                {/* New text line, displayed only if clientConfig exists (i.e., on a client subdomain) */}
+                {clientConfig && (
+          <div className="w-full text-center text-neutral-600 dark:text-neutral-300 text-base md:text-lg mb-6">
+            This maker uses Filament Farm MFG to host and manufacture their products.
+          </div>
+        )}
+
       </div>
 
       <div className="mx-auto w-full max-w-7xl border-t border-neutral-200 px-6 py-4 text-center text-sm text-neutral-500 dark:border-neutral-700 dark:text-neutral-400">
