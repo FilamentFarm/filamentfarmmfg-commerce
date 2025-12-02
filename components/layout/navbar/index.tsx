@@ -1,7 +1,7 @@
 import BrandHomeButton from './brand-home-button';
 import CartModal from 'components/cart/modal';
 import { Suspense } from 'react';
-import Search, { SearchSkeleton } from './search';
+import Search from './search'; // Removed SearchSkeleton from import
 import { ClientConfig } from 'lib/client-config';
 import Link from 'next/link';
 
@@ -13,7 +13,7 @@ export function Navbar({ client }: { client: ClientConfig }) {
           <div className="flex items-center gap-3">
             <BrandHomeButton client={client} />
             <Link
-              href={`/search/${client.shopifyCollectionHandle}`}
+              href={`/search/all`}
               className="text-neutral-500 underline-offset-4 hover:text-black hover:underline dark:text-neutral-400 dark:hover:text-neutral-300"
             >
               All Products
@@ -21,7 +21,7 @@ export function Navbar({ client }: { client: ClientConfig }) {
           </div>
         </div>
         <div className="hidden justify-center md:flex md:w-1/3">
-          <Suspense fallback={<SearchSkeleton />}>
+          <Suspense fallback={null}> {/* Replaced SearchSkeleton with null fallback */}
             <Search />
           </Suspense>
         </div>
