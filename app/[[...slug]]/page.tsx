@@ -1,8 +1,8 @@
-// app/[[...slug]]/page.tsx
-
 import ClientLogoBanner from 'components/layout/client-logo-banner';
 import { ThreeItemGrid } from 'components/grid/three-items';
 import Footer from 'components/layout/footer';
+import { getClientConfig } from 'lib/get-client-config';
+import { notFound } from 'next/navigation';
 
 export const metadata = {
   description:
@@ -11,6 +11,12 @@ export const metadata = {
 };
 
 export default async function HomePage() {
+  const clientConfig = await getClientConfig();
+
+  if (!clientConfig) {
+    return notFound();
+  }
+
   return (
     <>
       <ClientLogoBanner />
