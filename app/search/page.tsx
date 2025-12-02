@@ -35,9 +35,9 @@ export default async function SearchPage(props: {
     const lowerCaseSearchValue = searchValue.toLowerCase();
     products = products.filter(
       (product) =>
-        product.title.toLowerCase().includes(lowerCaseSearchValue) ||
-        product.descriptionHtml.toLowerCase().includes(lowerCaseSearchValue) ||
-        product.tags.some((tag) => tag.toLowerCase().includes(lowerCaseSearchValue))
+        (product.title ?? '').toLowerCase().includes(lowerCaseSearchValue) ||
+        (product.description ?? '').toLowerCase().includes(lowerCaseSearchValue) ||
+        (product.tags ?? []).some((tag) => tag.toLowerCase().includes(lowerCaseSearchValue))
     );
   }
 
