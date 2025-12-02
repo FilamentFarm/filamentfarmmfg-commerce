@@ -13,6 +13,8 @@ export async function generateMetadata(props: {
   const params = await props.params;
   const clientConfig = await getClientConfig();
 
+  if (!clientConfig) return notFound();
+
   const clientCollectionHandle = clientConfig.shopifyCollectionHandle;
   const currentTag = params.collection === 'all' ? null : params.collection;
 
@@ -40,6 +42,8 @@ export default async function SearchPage(props: {
   const params = await props.params;
   const searchParams = await props.searchParams;
   const clientConfig = await getClientConfig();
+
+  if (!clientConfig) return notFound();
 
   const clientCollectionHandle = clientConfig.shopifyCollectionHandle;
   const currentTag = params.collection === 'all' ? null : params.collection;

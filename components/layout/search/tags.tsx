@@ -7,6 +7,9 @@ import FilterList from './filter';
 
 async function TagList() {
   const clientConfig = await getClientConfig();
+
+  if (!clientConfig) return null;
+
   const products = await getCollectionProducts({ collection: clientConfig.shopifyCollectionHandle });
 
   let tags: string[] = [];
