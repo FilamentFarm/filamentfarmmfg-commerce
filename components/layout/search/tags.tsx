@@ -1,4 +1,4 @@
-'''import clsx from 'clsx';
+import clsx from 'clsx';
 import { Suspense } from 'react';
 
 import { getProducts } from 'lib/shopify';
@@ -45,4 +45,3 @@ export default function Tags() {
     </Suspense>
   );
 }
-'''
