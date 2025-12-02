@@ -25,14 +25,23 @@ export default async function SearchPage(props: {
   }
 
   console.log('DEBUG: clientConfig loaded:', clientConfig);
-  const products = await getCollectionProducts({
+  let products = await getCollectionProducts({
     collection: clientConfig.shopifyCollectionHandle,
     sortKey,
-    reverse,
-    query: searchValue || undefined
+    reverse
   });
 
-  console.log('DEBUG: Products fetched:', products);
+  if (searchValue) {
+    const lowerCaseSearchValue = searchValue.toLowerCase();
+    products = products.filter(
+      (product) =>
+        product.title.toLowerCase().includes(lowerCaseSearchValue) ||
+        product.descriptionHtml.toLowerCase().includes(lowerCaseSearchValue) ||
+        product.tags.some((tag) => tag.toLowerCase().includes(lowerCaseSearchValue))
+    );
+  }
+
+  console.log('DEBUG: Products fetched and filtered:', products);
 
   const resultsText = products.length > 1 ? 'results' : 'result';
 

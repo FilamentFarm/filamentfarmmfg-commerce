@@ -51,12 +51,15 @@ export default async function SearchPage(props: {
   const { sort } = (searchParams || {}) as { [key: string]: string };
   const { sortKey, reverse } = sorting.find((item) => item.slug === sort) || defaultSort;
 
-  const products = await getCollectionProducts({
+  let products = await getCollectionProducts({
     collection: clientCollectionHandle,
     sortKey,
-    reverse,
-    query: currentTag ? `tag:${currentTag}` : undefined
+    reverse
   });
+
+  if (currentTag) {
+    products = products.filter((product) => product.tags.includes(currentTag));
+  }
 
   return (
     <section>
