@@ -6,9 +6,10 @@ import ProductGridItems from 'components/layout/product-grid-items';
 import { defaultSort, sorting } from 'lib/constants';
 
 export async function generateMetadata(props: {
-  params: { collection: string };
+  params: Promise<{ collection: string }>;
 }): Promise<Metadata> {
-  const tag = props.params.collection;
+  const params = await props.params;
+  const tag = params.collection;
 
   return {
     title: `Products tagged with ${tag}`,
@@ -17,11 +18,13 @@ export async function generateMetadata(props: {
 }
 
 export default async function TagPage(props: {
-  params: { collection: string };
-  searchParams?: { [key: string]: string | string[] | undefined };
+  params: Promise<{ collection: string }>;
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
-  const searchParams = props.searchParams;
-  const tag = props.params.collection;
+  const params = await props.params;
+  const searchParams = await props.searchParams;
+
+  const tag = params.collection;
   const { sort } = (searchParams || {}) as { [key: string]: string };
   const { sortKey, reverse } = sorting.find((item) => item.slug === sort) || defaultSort;
 
