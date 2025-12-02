@@ -1,20 +1,27 @@
 import clsx from 'clsx';
 import { Suspense } from 'react';
 
-import { getProducts } from 'lib/shopify';
+import { getClientConfig } from 'lib/get-client-config';
+import { getCollectionProducts } from 'lib/shopify';
 import FilterList from './filter';
 
 async function TagList() {
+  const clientConfig = await getClientConfig();
+  const products = await getCollectionProducts({ collection: clientConfig.shopifyCollectionHandle });
+
   let tags: string[] = [];
-  let products = await getProducts({});
   products.forEach((product) => {
     tags.push(...product.tags);
   });
-  let uniqueTags = [...new Set(tags)];
-  const formattedTags = uniqueTags.map((tag) => ({
-    title: tag,
-    path: `/search/${tag}`
-  }));
+
+  const uniqueTags = [...new Set(tags)];
+  const formattedTags = [
+    { title: 'All', path: '/search/all' },
+    ...uniqueTags.map((tag) => ({
+      title: tag,
+      path: `/search/${tag}`
+    }))
+  ];
 
   return <FilterList list={formattedTags} title="Tags" />;
 }
