@@ -47,29 +47,26 @@ export default async function SearchPage(props: {
 
   let content;
 
-  if (searchValue) {
-    if (products.length === 0) {
-      content = (
-        <p className="mb-4">
-          {`No products found in ${clientConfig.name}'s collection that match "${searchValue}"`}
-        </p>
-      );
-    } else {
-      content = (
-        <p className="mb-4">
-          {`Showing ${products.length} ${resultsText} for "${searchValue}"`}
-        </p>
-      );
-    }
-  } else if (products.length === 0) {
+  if (products.length === 0) {
     content = (
-      <p className="py-3 text-lg">{`No products found in ${clientConfig.name}'s collection.`}</p>
+      <p className="py-3 text-lg">
+        {searchValue
+          ? `No products found in ${clientConfig.name}'s collection that match "${searchValue}"`
+          : `No products found in ${clientConfig.name}'s collection.`}
+      </p>
     );
   } else {
     content = (
-      <Grid className="grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-        <ProductGridItems products={products} />
-      </Grid>
+      <>
+        {searchValue ? (
+          <p className="mb-4">
+            {`Showing ${products.length} ${resultsText} for "${searchValue}"`}
+          </p>
+        ) : null}
+        <Grid className="grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+          <ProductGridItems products={products} />
+        </Grid>
+      </>
     );
   }
 
