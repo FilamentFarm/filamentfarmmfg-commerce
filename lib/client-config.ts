@@ -50,12 +50,12 @@ export const CLIENT_CONFIGS: Record<string, ClientConfig> = {
     logoUrl: "/logos/micosminis.png",
     bannerUrl: "/logos/micosminisbanner.png",
     theme: {
-      primaryColor: "#045B5D",
-      backgroundColor: "#575757",
+      primaryColor: "#110805",
+      backgroundColor: "#110805",
       textColor: "#ffffff",
-      productPageBackground: "#f3f3f3",        
-      productButtonColor: "#2a5298",           
-      productButtonHoverColor: "#1e3a8a"  
+      productPageBackground: "#110805",        
+      productButtonColor: "#be4e00",           
+      productButtonHoverColor: "712e00"  
     },
     shopifyCollectionHandle: "micos-minis"
   },
