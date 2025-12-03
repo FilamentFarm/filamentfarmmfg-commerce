@@ -16,7 +16,7 @@ export default function BrandHomeButton({ client }: { client: ClientConfig }) {
         <img
           src={logo}
           alt={`${name} logo`}
-          className="h-8 w-auto rounded-lg"
+          className="h-12 w-auto rounded-lg"
         />
       ) : (
         // Fallback if no logo is set
