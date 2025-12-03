@@ -17,7 +17,7 @@ export default async function Footer() {
   const contactLink = { title: 'FFMFG Contact', path: 'https://www.filamentfarmmfg.com/pages/contact' }; // EDIT THESE VALUES
 
   return (
-    <footer className="text-sm text-neutral-500 dark:text-neutral-400">
+    <footer className="text-sm text-neutral-500 dark:text-neutral-400" style={{ backgroundColor: clientConfig?.theme.backgroundColor }}>
       <div className="mx-auto w-full max-w-7xl flex-col gap-6 border-t border-neutral-200 px-6 pt-6 pb-6 text-sm md:flex-row md:gap-12 md:px-4 min-[1320px]:px-0 dark:border-neutral-700">
         {/* New text line, displayed only if clientConfig exists (i.e., on a client subdomain) */}
         {clientConfig && (

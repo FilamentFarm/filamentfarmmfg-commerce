@@ -57,7 +57,7 @@ export async function ThreeItemGrid() {
   return (
     <section
       className="mx-auto grid max-w-(--breakpoint-2xl) gap-4 px-4 pb-4 md:grid-cols-6 md:grid-rows-2"
-      // Note: we removed the previous lg:max-h limit so content can size to images.
+      style={{ backgroundColor: client?.theme.backgroundColor }}
     >
       {products[0] && (
         <ThreeItemGridItem size="full" item={products[0]} priority={true} />
