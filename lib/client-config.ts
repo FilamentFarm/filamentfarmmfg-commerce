@@ -21,7 +21,7 @@ export const CLIENT_CONFIGS: Record<string, ClientConfig> = {
     logoUrl: "/logos/kongclave.png",
     //bannerUrl: "/logos/kongclave-banner.png", // EXAMPLE: Add a banner URL for Kongclave
     theme: {
-      primaryColor: "#202020",
+      primaryColor: "#121212",
       backgroundColor: "#202020",
       textColor: "#ffffff",
       productPageBackground: "#121212",        

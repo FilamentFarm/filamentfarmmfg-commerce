@@ -29,7 +29,7 @@ export default async function ClientLogoBanner() {
     `${Math.min(maxWidthVw, 40)}vw`;
 
   return (
-    <div className="w-full bg-[var(--accent-color)]">
+    <div className="w-full bg-[var(--accent-color)] pb-4">
       <div className="mx-auto max-w-screen-2xl flex items-center justify-center">
         {imageUrl ? (
           <Image
