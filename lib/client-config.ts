@@ -31,7 +31,7 @@ export const CLIENT_CONFIGS: Record<string, ClientConfig> = {
 
   monstersinc: {
     name: "Monsters Inc.",
-    logoUrl: "/logos/monstersinc.png,", // served from /public
+    logoUrl: "/logos/monstersinc.png", // served from /public
     theme: {
       primaryColor: "#045B5D",
       backgroundColor: "#575757",
@@ -45,7 +45,7 @@ export const CLIENT_CONFIGS: Record<string, ClientConfig> = {
   
   micosminis: {
     name: "Mico's Minis",
-    logoUrl: "/logos/micosminis.png,", // served from /public
+    logoUrl: "/logos/micosminis.png", // served from /public
     theme: {
       primaryColor: "#045B5D",
       backgroundColor: "#575757",
