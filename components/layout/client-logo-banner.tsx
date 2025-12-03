@@ -9,23 +9,18 @@ function clamp(n: number, min: number, max: number) {
 export default async function ClientLogoBanner() {
   const cfg = await getClientConfig();
 
-  // Use client-specific logo from config; fallback to nothing
-  const logo = cfg?.logoUrl
-    ? {
-        url: cfg.logoUrl,
-        alt: cfg.name ?? 'Filament Farm MFG',
-        width: 160,
-        height: 40
-      }
-    : null;
+  // As [[...slug]]/page.tsx ensures cfg is not null, we can proceed safely here.
+  // Determine which media to use (banner or logo)
+  const isBanner = !!cfg?.bannerUrl;
+  const imageUrl = isBanner ? cfg.bannerUrl : cfg?.logoUrl;
+  const imageAlt = cfg?.name ? (isBanner ? `${cfg.name} banner` : `${cfg.name} logo`) : 'Client Branding';
+  
+  // Provide sensible defaults for Next/Image to prevent layout shift
+  const defaultWidth = isBanner ? 1200 : 160; // Wider default for banners
+  const defaultHeight = isBanner ? 300 : 40; // Proportional height for banners
 
-
-  // Editable in Shopify → Branding.metaobject field: logo_max_width_vw (20–100)
-  const maxWidthVw = clamp(
-    Number((cfg as any)?.branding?.logoMaxWidthVw ?? (cfg as any)?.branding?.logo_max_width_vw ?? 90),
-    20,
-    100
-  );
+  // Max width for the image in vw (simplified from previous metafield logic)
+  const maxWidthVw = clamp(90, 20, 100); 
 
   // sizes hint for Next/Image (smaller on mobile, moderate on tablet, tighter on desktop)
   const sizes =
@@ -35,18 +30,16 @@ export default async function ClientLogoBanner() {
 
   return (
     <div className="w-full bg-[var(--accent-color)]">
-      {/* No fixed height: bar height follows image height */}
       <div className="mx-auto max-w-screen-2xl flex items-center justify-center">
-        {logo ? (
+        {imageUrl ? (
           <Image
-            src={logo.url}
-            alt={logo.alt}
-            width={logo.width}
-            height={logo.height}
+            src={imageUrl}
+            alt={imageAlt}
+            width={defaultWidth}
+            height={defaultHeight}
             priority
             className="h-auto w-auto"
             sizes={sizes}
-            // Limit visual width using vw from Shopify; intrinsic ratio preserves height
             style={{ maxWidth: `${maxWidthVw}vw` }}
           />
         ) : (
@@ -58,6 +51,3 @@ export default async function ClientLogoBanner() {
     </div>
   );
 }
-
-
-
