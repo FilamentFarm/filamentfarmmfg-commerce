@@ -19,7 +19,7 @@ export const CLIENT_CONFIGS: Record<string, ClientConfig> = {
   kongclave: {
     name: "Kongclave Miniatures",
     logoUrl: "/logos/kongclave.png",
-    bannerUrl: "/banners/kongclave-banner.png", // EXAMPLE: Add a banner URL for Kongclave
+    //bannerUrl: "/logos/kongclave-banner.png", // EXAMPLE: Add a banner URL for Kongclave
     theme: {
       primaryColor: "#121212",
       backgroundColor: "#202020",
@@ -48,7 +48,7 @@ export const CLIENT_CONFIGS: Record<string, ClientConfig> = {
   micosminis: {
     name: "Mico's Minis",
     logoUrl: "/logos/micosminis.png",
-    bannerUrl: "/banners/kongclave-banner.png",
+    bannerUrl: "/logos/micosminisbanner.png",
     theme: {
       primaryColor: "#045B5D",
       backgroundColor: "#575757",
