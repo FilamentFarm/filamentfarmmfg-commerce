@@ -31,7 +31,7 @@ export const CLIENT_CONFIGS: Record<string, ClientConfig> = {
 
   monstersinc: {
     name: "Monsters Inc.",
-    logoUrl: "/logos/monstersinc.png',", // served from /public
+    logoUrl: "/logos/monstersinc.png,", // served from /public
     theme: {
       primaryColor: "#045B5D",
       backgroundColor: "#575757",
@@ -41,6 +41,20 @@ export const CLIENT_CONFIGS: Record<string, ClientConfig> = {
       productButtonHoverColor: "#1e3a8a"  
     },
     shopifyCollectionHandle: "client-monstersinc"
+  },
+  
+  micosminis: {
+    name: "Mico's Minis",
+    logoUrl: "/logos/micosminis.png,", // served from /public
+    theme: {
+      primaryColor: "#045B5D",
+      backgroundColor: "#575757",
+      textColor: "#ffffff",
+      productPageBackground: "#f3f3f3",        
+      productButtonColor: "#2a5298",           
+      productButtonHoverColor: "#1e3a8a"  
+    },
+    shopifyCollectionHandle: "micos-minis"
   },
   
   // Add more clients here as needed
