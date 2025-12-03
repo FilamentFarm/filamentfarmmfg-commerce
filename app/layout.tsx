@@ -56,6 +56,7 @@ export default async function Layout({
       <body
         style={
           {
+            backgroundColor: backgroundColor,
             '--bg-color': backgroundColor,
             '--text-color': textColor,
             '--accent-color': accentColor,
