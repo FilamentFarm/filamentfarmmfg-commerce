@@ -25,6 +25,10 @@ export default async function HomePage() {
     collection: clientConfig.shopifyCollectionHandle
   });
   const productsToShow = allProducts.slice(0, 6);
+  const productButtonColor =
+    clientConfig.theme.productButtonColor || clientConfig.theme.primaryColor;
+  const productButtonHoverColor =
+    clientConfig.theme.productButtonHoverColor || '#333333';
 
   return (
     <>
@@ -50,7 +54,22 @@ export default async function HomePage() {
               <div className="mt-8 text-center">
                 <Link
                   href="/search/all"
-                  className="inline-block rounded-full bg-blue-600 px-8 py-3 text-lg font-medium text-white hover:bg-blue-700"
+                  className="inline-block rounded-full px-8 py-3 text-lg font-medium text-white transition-colors"
+                  style={
+                    {
+                      '--featured-btn': productButtonColor,
+                      '--featured-btn-hover': productButtonHoverColor,
+                      backgroundColor: 'var(--featured-btn)'
+                    } as React.CSSProperties
+                  }
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor =
+                      'var(--featured-btn-hover)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor =
+                      'var(--featured-btn)';
+                  }}
                 >
                   View All
                 </Link>
