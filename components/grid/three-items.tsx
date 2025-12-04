@@ -5,6 +5,9 @@ import { getCollectionProducts } from 'lib/shopify';
 import type { Product } from 'lib/shopify/types';
 import Link from 'next/link';
 
+// Global cap on the hero grid height to prevent overly tall layouts
+const MAX_GRID_HEIGHT_PX = 720;
+
 function ThreeItemGridItem({
   item,
   size,
@@ -56,8 +59,11 @@ export async function ThreeItemGrid() {
 
   return (
     <section
-      className="mx-auto grid max-w-(--breakpoint-2xl) gap-4 px-4 pb-4 md:grid-cols-6 md:grid-rows-2"
-      style={{ backgroundColor: client?.theme.backgroundColor }}
+      className="mx-auto grid max-w-(--breakpoint-2xl) gap-4 px-4 pb-4 md:grid-cols-6 md:grid-rows-2 overflow-hidden"
+      style={{
+        backgroundColor: client?.theme.backgroundColor,
+        maxHeight: `${MAX_GRID_HEIGHT_PX}px`
+      }}
     >
       {products[0] && (
         <ThreeItemGridItem size="full" item={products[0]} priority={true} />

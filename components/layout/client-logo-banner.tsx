@@ -23,14 +23,19 @@ export default async function ClientLogoBanner() {
   const maxWidthVw = clamp(90, 20, 100); 
 
   // sizes hint for Next/Image (smaller on mobile, moderate on tablet, tighter on desktop)
-  const sizes =
-    `(max-width: 768px) ${Math.min(maxWidthVw, 90)}vw, ` +
-    `(max-width: 1280px) ${Math.min(maxWidthVw, 60)}vw, ` +
-    `${Math.min(maxWidthVw, 40)}vw`;
+  const sizes = isBanner
+    ? '100vw'
+    : `(max-width: 768px) ${Math.min(maxWidthVw, 90)}vw, ` +
+      `(max-width: 1280px) ${Math.min(maxWidthVw, 60)}vw, ` +
+      `${Math.min(maxWidthVw, 40)}vw`;
+
+  const wrapperClass = isBanner
+    ? 'w-full'
+    : 'mx-auto max-w-screen-2xl flex items-center justify-center';
 
   return (
     <div className="w-full bg-[var(--accent-color)]">
-      <div className="mx-auto max-w-screen-2xl flex items-center justify-center">
+      <div className={wrapperClass}>
         {imageUrl ? (
           <Image
             src={imageUrl}
@@ -38,9 +43,13 @@ export default async function ClientLogoBanner() {
             width={defaultWidth}
             height={defaultHeight}
             priority
-            className="h-auto w-auto"
+            className={isBanner ? 'h-auto w-full' : 'h-auto w-auto'}
             sizes={sizes}
-            style={{ maxWidth: `${maxWidthVw}vw` }}
+            style={
+              isBanner
+                ? { width: '100%', height: 'auto' }
+                : { maxWidth: `${maxWidthVw}vw` }
+            }
           />
         ) : (
           <span className="text-[var(--bg-color)]/90 text-lg sm:text-xl md:text-2xl font-semibold">
