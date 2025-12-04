@@ -20,20 +20,22 @@ function ThreeItemGridItem({
   const img = item.featuredImage;
 
   return (
-    <div className={size === 'full' ? 'md:col-span-4 md:row-span-2' : 'md:col-span-2 md:row-span-1'}>
+    <div
+      className={`${size === 'full' ? 'md:col-span-4 md:row-span-2' : 'md:col-span-2 md:row-span-1'} h-full`}
+    >
       <Link
         href={`/product/${item.handle}`}
         prefetch={true}
-        // ⬇️ Remove forced square/height so intrinsic sizing can work
-        className="relative block w-full"
+        // Remove forced square/height so intrinsic sizing can work
+        className="relative block h-full w-full"
       >
         <GridTileImage
           src={img.url}
           alt={img.altText ?? item.title}
-          // ⬇️ Pass real dimensions to enable intrinsic mode
+          // Pass real dimensions to enable intrinsic mode
           width={img.width}
           height={img.height}
-          // Keep sizes logic — can be tuned later if desired
+          // Keep sizes logic; can be tuned later if desired
           sizes={
             size === 'full' ? '(min-width: 768px) 66vw, 100vw' : '(min-width: 768px) 33vw, 100vw'
           }
@@ -44,6 +46,7 @@ function ThreeItemGridItem({
             amount: item.priceRange.maxVariantPrice.amount,
             currencyCode: item.priceRange.maxVariantPrice.currencyCode
           }}
+          className="h-full"
         />
       </Link>
     </div>
@@ -59,10 +62,10 @@ export async function ThreeItemGrid() {
 
   return (
     <section
-      className="mx-auto grid max-w-(--breakpoint-2xl) gap-4 px-4 pb-4 md:grid-cols-6 md:grid-rows-2 overflow-hidden"
+      className="mx-auto grid max-w-(--breakpoint-2xl) gap-4 px-4 pb-4 md:grid-cols-6 md:grid-rows-[repeat(2,minmax(0,1fr))]"
       style={{
         backgroundColor: client?.theme.backgroundColor,
-        maxHeight: `${MAX_GRID_HEIGHT_PX}px`
+        height: `min(70vw, ${MAX_GRID_HEIGHT_PX}px)`
       }}
     >
       {products[0] && (
