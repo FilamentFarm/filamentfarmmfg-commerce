@@ -2,52 +2,71 @@
 import Image from 'next/image';
 import { getClientConfig } from 'lib/get-client-config';
 
-function clamp(n: number, min: number, max: number) {
-  return Math.max(min, Math.min(max, n));
-}
-
 export default async function ClientLogoBanner() {
   const cfg = await getClientConfig();
 
-  // As [[...slug]]/page.tsx ensures cfg is not null, we can proceed safely here.
-  // Determine which media to use (banner or logo)
-  const isBanner = !!cfg?.bannerUrl;
-  const imageUrl = isBanner ? cfg.bannerUrl : cfg?.logoUrl;
-  const imageAlt = cfg?.name ? (isBanner ? `${cfg.name} banner` : `${cfg.name} logo`) : 'Client Branding';
-  
-  // Provide sensible defaults for Next/Image to prevent layout shift
-  const defaultWidth = isBanner ? 1200 : 160; // Wider default for banners
-  const defaultHeight = isBanner ? 300 : 40; // Proportional height for banners
+  if (!cfg) {
+    return null; 
+  }
 
-  // Max width for the image in vw (simplified from previous metafield logic)
-  const maxWidthVw = clamp(90, 20, 100); 
+  const isBanner = !!cfg.bannerUrl;
+  const imageUrl = isBanner ? cfg.bannerUrl : cfg.logoUrl;
+  const imageAlt = cfg.name ? (isBanner ? `${cfg.name} banner` : `${cfg.name} logo`) : 'Client Branding';
 
-  // sizes hint for Next/Image (smaller on mobile, moderate on tablet, tighter on desktop)
-  const sizes =
-    `(max-width: 768px) ${Math.min(maxWidthVw, 90)}vw, ` +
-    `(max-width: 1280px) ${Math.min(maxWidthVw, 60)}vw, ` +
-    `${Math.min(maxWidthVw, 40)}vw`;
+  // Define intrinsic heights. These will directly control the container's height.
+  const bannerIntrinsicWidth = 1200;
+  const bannerIntrinsicHeight = 300;
+  const logoIntrinsicWidth = 160;
+  const logoIntrinsicHeight = 40;  
+
+  const currentIntrinsicHeight = isBanner ? bannerIntrinsicHeight : logoIntrinsicHeight;
 
   return (
-    <div className="w-full bg-[var(--accent-color)]">
-      <div className="mx-auto max-w-screen-2xl flex items-center justify-center">
-        {imageUrl ? (
-          <Image
-            src={imageUrl}
-            alt={imageAlt}
-            width={defaultWidth}
-            height={defaultHeight}
-            priority
-            className="h-auto w-auto"
-            sizes={sizes}
-            style={{ maxWidth: `${maxWidthVw}vw` }}
-          />
-        ) : (
+    <div className="w-full bg-[var(--accent-color)] py-4"> 
+      {imageUrl ? (
+        // Outer wrapper: conditional max-width for logo, full width for banner
+        <div className={isBanner ? "" : "mx-auto max-w-screen-2xl"}> 
+          {isBanner ? (
+            // Banner specific container: takes full width of its parent
+            <div
+              className="relative w-full overflow-hidden"
+              style={{ height: `${bannerIntrinsicHeight}px` }} 
+            >
+              <Image
+                src={imageUrl}
+                alt={imageAlt}
+                fill
+                priority
+                className="object-cover object-center"
+              />
+            </div>
+          ) : (
+            // Logo specific container: centered and constrained max-width
+            <div
+              className="relative w-full overflow-hidden max-w-[16rem] mx-auto"
+              style={{ height: `${logoIntrinsicHeight}px` }} 
+            >
+              <Image
+                src={imageUrl}
+                alt={imageAlt}
+                fill
+                priority
+                className="object-contain object-center"
+              />
+            </div>
+          )}
+        </div>
+      ) : (
+        // Text fallback if no image URL is present
+        <div 
+          className="flex items-center justify-center mx-auto max-w-screen-2xl py-4"
+          style={{ height: `${currentIntrinsicHeight}px` }} 
+        >
           <span className="text-[var(--bg-color)]/90 text-lg sm:text-xl md:text-2xl font-semibold">
-            {cfg?.name ?? 'Our Store'}
+            {cfg.name ?? 'Our Store'}
           </span>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }
