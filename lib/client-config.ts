@@ -24,7 +24,7 @@ export const CLIENT_CONFIGS: Record<string, ClientConfig> = {
       primaryColor: "#121212",
       backgroundColor: "#202020",
       textColor: "#ffffff",
-      productPageBackground: "#121212",        
+      productPageBackground: "#202020",        
       productButtonColor: "#004cd9",           
       productButtonHoverColor: "#0068db"      
     },
