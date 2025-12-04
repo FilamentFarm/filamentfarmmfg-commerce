@@ -7,6 +7,7 @@ import { getCollectionProducts } from 'lib/shopify';
 import ProductGridItems from 'components/layout/product-grid-items';
 import Grid from 'components/grid';
 import Link from 'next/link';
+import type { CSSProperties } from 'react';
 
 export const metadata = {
   description:
@@ -27,8 +28,6 @@ export default async function HomePage() {
   const productsToShow = allProducts.slice(0, 6);
   const productButtonColor =
     clientConfig.theme.productButtonColor || clientConfig.theme.primaryColor;
-  const productButtonHoverColor =
-    clientConfig.theme.productButtonHoverColor || '#333333';
 
   return (
     <>
@@ -54,22 +53,8 @@ export default async function HomePage() {
               <div className="mt-8 text-center">
                 <Link
                   href="/search/all"
-                  className="inline-block rounded-full px-8 py-3 text-lg font-medium text-white transition-colors"
-                  style={
-                    {
-                      '--featured-btn': productButtonColor,
-                      '--featured-btn-hover': productButtonHoverColor,
-                      backgroundColor: 'var(--featured-btn)'
-                    } as React.CSSProperties
-                  }
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor =
-                      'var(--featured-btn-hover)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor =
-                      'var(--featured-btn)';
-                  }}
+                  className="inline-block rounded-full px-8 py-3 text-lg font-medium text-white transition hover:opacity-90"
+                  style={{ backgroundColor: productButtonColor } as CSSProperties}
                 >
                   View All
                 </Link>
