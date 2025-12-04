@@ -51,7 +51,7 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
   };
 
   return (
-    <ProductProvider product={product}>
+    <ProductProvider> {/* Removed product={product} */}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }} />
       <div style={{ backgroundColor: clientConfig.theme.productPageBackground, color: clientConfig.theme.textColor }}>
         <div className="mx-auto max-w-screen-2xl px-4">
