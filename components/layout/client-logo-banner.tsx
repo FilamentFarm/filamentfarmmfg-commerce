@@ -18,7 +18,7 @@ export default async function ClientLogoBanner() {
   const bannerIntrinsicWidth = 1200;
   const bannerIntrinsicHeight = 300;
   const logoIntrinsicWidth = 160;
-  const logoIntrinsicHeight = 40;
+  const logoIntrinsicHeight = 80;
 
   const currentIntrinsicHeight = isBanner ? bannerIntrinsicHeight : logoIntrinsicHeight;
 
