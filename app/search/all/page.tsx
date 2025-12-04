@@ -10,7 +10,7 @@ export const metadata = {
   description: 'Search for products in the store.'
 };
 
-export default async function SearchPage({ searchParams: searchParamsPromise }: { searchParams?: Promise<{ [key: string]: string | string[] | undefined }> }) {
+export default async function SearchPage({ searchParams: searchParamsPromise }: { searchParams?: Promise<any> }) {
   const clientConfig = await getClientConfig();
   if (!clientConfig) return notFound();
 
