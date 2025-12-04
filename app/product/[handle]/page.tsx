@@ -11,8 +11,9 @@ import { ProductProvider } from 'components/product/product-context';
 import Link from 'next/link';
 import { GridTileImage } from 'components/grid/tile';
 
-export async function generateMetadata({ params }: { params: { handle: string } }) {
-  const product = await getProduct(params.handle);
+export async function generateMetadata({ params }: { params: Promise<{ handle: string }> }) {
+  const resolvedParams = await params;
+  const product = await getProduct(resolvedParams.handle);
   if (!product) return notFound();
 
   const { url, width, height, altText: alt } = product.featuredImage || {};
@@ -26,11 +27,12 @@ export async function generateMetadata({ params }: { params: { handle: string } 
   };
 }
 
-export default async function ProductPage({ params }: { params: { handle: string } }) {
+export default async function ProductPage({ params }: { params: Promise<{ handle: string }> }) {
+  const resolvedParams = await params;
   const clientConfig = await getClientConfig();
   if (!clientConfig) return notFound();
 
-  const product = await getProduct(params.handle);
+  const product = await getProduct(resolvedParams.handle);
   if (!product) return notFound();
 
   const productJsonLd = {
