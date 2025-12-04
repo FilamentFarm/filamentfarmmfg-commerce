@@ -11,8 +11,6 @@ import { ProductProvider } from 'components/product/product-context';
 import Link from 'next/link';
 import { GridTileImage } from 'components/grid/tile';
 
-export const runtime = 'edge';
-
 export async function generateMetadata({ params }: { params: { handle: string } }) {
   const product = await getProduct(params.handle);
   if (!product) return notFound();
