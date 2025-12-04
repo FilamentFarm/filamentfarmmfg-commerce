@@ -1,5 +1,5 @@
 // components/layout/client-logo-banner.tsx
-import Image from 'next/image
+import Image from 'next/image'; // Added the missing closing quote and semicolon
 import { getClientConfig } from 'lib/get-client-config';
 
 export default async function ClientLogoBanner() {
