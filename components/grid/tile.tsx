@@ -23,7 +23,8 @@ type GridTileImageProps = {
   label?: LabelData;
   // NEW: used by gallery thumbnails to indicate selection
   active?: boolean;
-  borderColor?: string; // NEW: Added borderColor prop
+  borderColor?: string;
+  borderWidth?: string; // NEW: Added borderWidth prop
 };
 
 export function GridTileImage({
@@ -37,7 +38,8 @@ export function GridTileImage({
   height,
   label,
   active,
-  borderColor // Destructure new prop
+  borderColor,
+  borderWidth // Destructure new prop
 }: GridTileImageProps) {
   const hasIntrinsic = Boolean(width && height) && !fill;
 
@@ -55,7 +57,8 @@ export function GridTileImage({
       ].join(' ')}
       style={{
         ...(hasIntrinsic ? { aspectRatio: `${width}/${height}` } : {}),
-        ...(borderColor ? { borderColor: borderColor } : {}) // Apply dynamic border color
+        ...(borderColor ? { borderColor: borderColor } : {}),
+        ...(borderWidth ? { borderWidth: borderWidth } : {}) // Apply dynamic border width
       }}
       aria-current={active ? 'true' : undefined}
     >

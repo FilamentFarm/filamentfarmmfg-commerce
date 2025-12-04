@@ -41,7 +41,8 @@ export default async function HomePage() {
             <Grid className="grid-cols-2 sm:grid-cols-3 lg:grid-cols-6">
               <ProductGridItems 
                 products={productsToShow} 
-                accentColor={clientConfig.theme.primaryColor} // Pass accent color here
+                accentColor={clientConfig.theme.productButtonColor} // Use productButtonColor for border
+                borderWidth={clientConfig.theme.productCardBorderWidth} // Pass borderWidth
               />
             </Grid>
 
