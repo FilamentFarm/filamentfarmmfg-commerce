@@ -5,7 +5,7 @@ import { GridTileImage } from 'components/grid/tile';
 import { useProduct, useUpdateURL } from 'components/product/product-context';
 import Image from 'next/image';
 
-export function Gallery({ images }: { images: { src: string; altText: string }[] }) {
+export function Gallery({ images }: { images: { url: string; altText: string }[] }) {
   const { state, updateImage } = useProduct();
   const updateURL = useUpdateURL();
   const imageIndex = state.image ? parseInt(state.image) : 0;
@@ -25,7 +25,7 @@ export function Gallery({ images }: { images: { src: string; altText: string }[]
             fill
             sizes="(min-width: 1024px) 66vw, 100vw"
             alt={images[imageIndex]?.altText as string}
-            src={images[imageIndex]?.src as string}
+            src={images[imageIndex]?.url as string}
             priority={true}
           />
         )}
@@ -65,7 +65,7 @@ export function Gallery({ images }: { images: { src: string; altText: string }[]
             const isActive = index === imageIndex;
 
             return (
-              <li key={image.src} className="h-20 w-20">
+              <li key={image.url} className="h-20 w-20">
                 <button
                   formAction={() => {
                     const newState = updateImage(index.toString());
@@ -76,7 +76,7 @@ export function Gallery({ images }: { images: { src: string; altText: string }[]
                 >
                   <GridTileImage
                     alt={image.altText}
-                    src={image.src}
+                    src={image.url}
                     width={80}
                     height={80}
                     active={isActive}
