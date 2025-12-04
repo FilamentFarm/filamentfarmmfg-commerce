@@ -9,43 +9,40 @@ function clamp(n: number, min: number, max: number) {
 export default async function ClientLogoBanner() {
   const cfg = await getClientConfig();
 
-  // As [[...slug]]/page.tsx ensures cfg is not null, we can proceed safely here.
-  // Determine which media to use (banner or logo)
   const isBanner = !!cfg?.bannerUrl;
   const imageUrl = isBanner ? cfg.bannerUrl : cfg?.logoUrl;
   const imageAlt = cfg?.name ? (isBanner ? `${cfg.name} banner` : `${cfg.name} logo`) : 'Client Branding';
   
-  // Provide sensible defaults for Next/Image to prevent layout shift
-  const defaultWidth = isBanner ? 1200 : 160; // Wider default for banners
-  const defaultHeight = isBanner ? 300 : 40; // Proportional height for banners
-
-  // Max width for the image in vw (simplified from previous metafield logic)
-  const maxWidthVw = clamp(90, 20, 100); 
-
-  // sizes hint for Next/Image (smaller on mobile, moderate on tablet, tighter on desktop)
-  const sizes =
-    `(max-width: 768px) ${Math.min(maxWidthVw, 90)}vw, ` +
-    `(max-width: 1280px) ${Math.min(maxWidthVw, 60)}vw, ` +
-    `${Math.min(maxWidthVw, 40)}vw`;
+  // Provide sensible intrinsic size hints for calculating aspect ratio.
+  const intrinsicWidth = isBanner ? 1200 : 160; // Example intrinsic width for banner vs logo
+  const intrinsicHeight = isBanner ? 300 : 40; // Example intrinsic height for banner vs logo
 
   return (
     <div className="w-full bg-[var(--accent-color)] pb-4">
-      <div className="mx-auto max-w-screen-2xl flex items-center justify-center">
+      {/* Container for the image, capped by max-w-screen-2xl and with aspect ratio */}
+      <div
+        className="relative mx-auto max-w-screen-2xl overflow-hidden"
+        style={{
+            paddingBottom: isBanner ? `${(intrinsicHeight / intrinsicWidth) * 100}%` : undefined, // Maintain aspect ratio for banners
+            height: isBanner ? 'auto' : `${intrinsicHeight}px`, // Keep logo height fixed if not a banner
+            minHeight: isBanner ? '100px' : undefined // Ensure banner has a minimum height
+        }}
+      >
         {imageUrl ? (
           <Image
             src={imageUrl}
             alt={imageAlt}
-            width={defaultWidth}
-            height={defaultHeight}
+            fill // Make the image fill its parent container
             priority
-            className="h-auto w-auto"
-            sizes={sizes}
-            style={{ maxWidth: `${maxWidthVw}vw` }}
+            className="object-cover object-center" // Zoom in and center
+            // width, height, sizes, and style props are ignored when fill is true
           />
         ) : (
-          <span className="text-[var(--bg-color)]/90 text-lg sm:text-xl md:text-2xl font-semibold">
-            {cfg?.name ?? 'Our Store'}
-          </span>
+          <div className="flex h-full items-center justify-center"> {/* Centering for text fallback */} 
+            <span className="text-[var(--bg-color)]/90 text-lg sm:text-xl md:text-2xl font-semibold">
+              {cfg?.name ?? 'Our Store'}
+            </span>
+          </div>
         )}
       </div>
     </div>

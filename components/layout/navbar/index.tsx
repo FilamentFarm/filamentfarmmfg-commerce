@@ -7,7 +7,13 @@ import Link from 'next/link';
 
 export function Navbar({ client }: { client: ClientConfig }) {
   return (
-    <nav className="relative flex items-center justify-between p-4 lg:px-6" style={{ backgroundColor: client.theme.backgroundColor }}>
+    <nav
+      className="relative flex items-center justify-between p-4 lg:px-6 border-b border-solid" // Added border-b and border-solid classes
+      style={{
+        backgroundColor: client.theme.backgroundColor,
+        borderColor: client.theme.primaryColor // Set border color dynamically
+      }}
+    >
       <div className="flex w-full items-center">
         <div className="flex w-full md:w-1/3">
           <div className="flex items-center gap-3">
