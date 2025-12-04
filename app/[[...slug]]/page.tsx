@@ -3,6 +3,10 @@ import { ThreeItemGrid } from 'components/grid/three-items';
 import Footer from 'components/layout/footer';
 import { getClientConfig } from 'lib/get-client-config';
 import { notFound } from 'next/navigation';
+import { getCollectionProducts } from 'lib/shopify';
+import ProductGridItems from 'components/layout/product-grid-items';
+import Grid from 'components/grid';
+import Link from 'next/link';
 
 export const metadata = {
   description:
@@ -17,10 +21,41 @@ export default async function HomePage() {
     return notFound();
   }
 
+  const allProducts = await getCollectionProducts({
+    collection: clientConfig.shopifyCollectionHandle
+  });
+  const productsToShow = allProducts.slice(0, 6);
+
   return (
     <>
       <ClientLogoBanner />
       <ThreeItemGrid />
+
+      {/* New Product Grid Section */}
+      {productsToShow.length > 0 && (
+        <section style={{ backgroundColor: clientConfig.theme.backgroundColor }} className="py-8">
+          <div className="mx-auto max-w-screen-2xl px-4">
+            <h2 className="mb-4 text-2xl font-bold" style={{ color: clientConfig.theme.textColor }}>
+              Featured Products
+            </h2>
+            <Grid className="grid-cols-2 sm:grid-cols-3 lg:grid-cols-6">
+              <ProductGridItems products={productsToShow} />
+            </Grid>
+
+            {allProducts.length > 6 && (
+              <div className="mt-8 text-center">
+                <Link
+                  href="/search/all"
+                  className="inline-block rounded-full bg-blue-600 px-8 py-3 text-lg font-medium text-white hover:bg-blue-700"
+                >
+                  View All
+                </Link>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
+
       <Footer />
     </>
   );
