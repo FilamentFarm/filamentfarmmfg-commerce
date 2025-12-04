@@ -39,7 +39,10 @@ export default async function HomePage() {
               Featured Products
             </h2>
             <Grid className="grid-cols-2 sm:grid-cols-3 lg:grid-cols-6">
-              <ProductGridItems products={productsToShow} />
+              <ProductGridItems 
+                products={productsToShow} 
+                accentColor={clientConfig.theme.primaryColor} // Pass accent color here
+              />
             </Grid>
 
             {allProducts.length > 6 && (

@@ -23,6 +23,7 @@ type GridTileImageProps = {
   label?: LabelData;
   // NEW: used by gallery thumbnails to indicate selection
   active?: boolean;
+  borderColor?: string; // NEW: Added borderColor prop
 };
 
 export function GridTileImage({
@@ -35,7 +36,8 @@ export function GridTileImage({
   width,
   height,
   label,
-  active
+  active,
+  borderColor // Destructure new prop
 }: GridTileImageProps) {
   const hasIntrinsic = Boolean(width && height) && !fill;
 
@@ -43,13 +45,18 @@ export function GridTileImage({
     <div
       className={[
         'relative overflow-hidden rounded-2xl bg-[var(--bg-color)]',
+        // Add border classes
+        borderColor ? 'border border-solid' : '',
         // highlight when active (used in product gallery)
         active ? 'ring-2 ring-offset-2 ring-[var(--accent-color)] ring-offset-[var(--bg-color)]' : '',
         // Only force a square when we don't know the image ratio
         hasIntrinsic ? '' : 'aspect-square',
         className
       ].join(' ')}
-      style={hasIntrinsic ? { aspectRatio: `${width}/${height}` } : undefined}
+      style={{
+        ...(hasIntrinsic ? { aspectRatio: `${width}/${height}` } : {}),
+        ...(borderColor ? { borderColor: borderColor } : {}) // Apply dynamic border color
+      }}
       aria-current={active ? 'true' : undefined}
     >
       {hasIntrinsic ? (

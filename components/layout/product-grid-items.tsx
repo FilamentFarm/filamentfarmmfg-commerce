@@ -3,7 +3,7 @@ import { GridTileImage } from 'components/grid/tile';
 import { Product } from 'lib/shopify/types';
 import Link from 'next/link';
 
-export default function ProductGridItems({ products }: { products: Product[] }) {
+export default function ProductGridItems({ products, accentColor }: { products: Product[], accentColor?: string }) {
   return (
     <>
       {products.map((product) => (
@@ -23,6 +23,7 @@ export default function ProductGridItems({ products }: { products: Product[] }) 
               src={product.featuredImage?.url}
               fill
               sizes="(min-width: 768px) 33vw, (min-width: 640px) 50vw, 100vw"
+              borderColor={accentColor} // Pass accentColor as borderColor
             />
           </Link>
         </Grid.Item>
