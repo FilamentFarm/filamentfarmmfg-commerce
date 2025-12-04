@@ -20,7 +20,11 @@ export default async function ClientLogoBanner() {
   const logoIntrinsicWidth = 160;
   const logoIntrinsicHeight = 40;
 
+  const currentIntrinsicWidth = isBanner ? bannerIntrinsicWidth : logoIntrinsicWidth;
   const currentIntrinsicHeight = isBanner ? bannerIntrinsicHeight : logoIntrinsicHeight;
+
+  // Calculate paddingBottom for aspect ratio to prevent layout shift
+  const aspectRatioPadding = (currentIntrinsicHeight / currentIntrinsicWidth) * 100;
 
   return (
     <div className="w-full bg-[var(--accent-color)] py-4"> {/* Fixed vertical padding here */}
@@ -30,8 +34,11 @@ export default async function ClientLogoBanner() {
           {isBanner ? (
             // Banner specific container: takes full width of its parent (max-w-screen-2xl)
             <div
-              className="relative w-full h-full overflow-hidden"
-              style={{ maxHeight: `${currentIntrinsicHeight}px` }} // Cap height at intrinsic image height
+              className="relative w-full overflow-hidden" // Removed h-full
+              style={{ 
+                paddingBottom: `${aspectRatioPadding}%`,
+                maxHeight: `${currentIntrinsicHeight}px` // Cap height at intrinsic image height
+              }}
             >
               <Image
                 src={imageUrl}
@@ -44,8 +51,11 @@ export default async function ClientLogoBanner() {
           ) : (
             // Logo specific container: centered and constrained max-width
             <div
-              className="relative mx-auto w-full h-full overflow-hidden max-w-[16rem]" // Max width for the logo container
-              style={{ maxHeight: `${currentIntrinsicHeight}px` }} // Cap height at intrinsic image height
+              className="relative mx-auto w-full overflow-hidden max-w-[16rem]" // Removed h-full
+              style={{ 
+                paddingBottom: `${aspectRatioPadding}%`,
+                maxHeight: `${currentIntrinsicHeight}px` // Cap height at intrinsic image height
+              }}
             >
               <Image
                 src={imageUrl}
