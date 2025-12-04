@@ -1,76 +1,60 @@
 // components/layout/client-logo-banner.tsx
-import Image from 'next/image'; // Added the missing closing quote and semicolon
+import Image from 'next/image'; // Corrected import statement
 import { getClientConfig } from 'lib/get-client-config';
 
 export default async function ClientLogoBanner() {
   const cfg = await getClientConfig();
 
-  // Handle case where clientConfig might be null
   if (!cfg) {
-    return null; // Render nothing if no client config is found
+    return null; 
   }
 
   const isBanner = !!cfg.bannerUrl;
   const imageUrl = isBanner ? cfg.bannerUrl : cfg.logoUrl;
   const imageAlt = cfg.name ? (isBanner ? `${cfg.name} banner` : `${cfg.name} logo`) : 'Client Branding';
 
-  // Define intrinsic sizes. These should roughly match the actual dimensions of your images.
-  const bannerIntrinsicWidth = 1200;
+  // Define intrinsic heights. These will directly control the container's height.
   const bannerIntrinsicHeight = 300;
-  const logoIntrinsicWidth = 160;
-  const logoIntrinsicHeight = 80;
+  const logoIntrinsicHeight = 80;  
 
   const currentIntrinsicHeight = isBanner ? bannerIntrinsicHeight : logoIntrinsicHeight;
 
   return (
-    <div className="w-full bg-[var(--accent-color)] py-4"> {/* Fixed vertical padding here */}
+    <div className="w-full bg-[var(--accent-color)] py-4"> 
       {imageUrl ? (
-        // Outer wrapper to center and limit max width of the entire banner/logo section visually
         <div className="mx-auto max-w-screen-2xl">
           {isBanner ? (
-            // Banner specific container: takes full width of its parent (max-w-screen-2xl)
             <div
               className="relative w-full overflow-hidden"
-              style={{ 
-                minHeight: `${currentIntrinsicHeight}px`,
-                maxHeight: `${currentIntrinsicHeight}px`
-              }}
+              style={{ height: `${bannerIntrinsicHeight}px` }} // Direct height control
             >
               <Image
                 src={imageUrl}
                 alt={imageAlt}
                 fill
                 priority
-                className="object-cover object-center" // Scales to cover, crops if aspect ratio mismatch
+                className="object-cover object-center"
               />
             </div>
           ) : (
-            // Logo specific container: centered and constrained max-width
             <div
               className="relative mx-auto w-full overflow-hidden max-w-[16rem]"
-              style={{ 
-                minHeight: `${currentIntrinsicHeight}px`,
-                maxHeight: `${currentIntrinsicHeight}px`
-              }}
+              style={{ height: `${logoIntrinsicHeight}px` }} // Direct height control
             >
               <Image
                 src={imageUrl}
                 alt={imageAlt}
                 fill
                 priority
-                className="object-contain object-center" // Scales to contain, no cropping
+                className="object-contain object-center"
               />
             </div>
           )}
         </div>
       ) : (
-        // Text fallback if no image URL is present
         <div 
           className="flex items-center justify-center mx-auto max-w-screen-2xl py-4"
-          style={{ 
-            minHeight: `${currentIntrinsicHeight}px`,
-            maxHeight: `${currentIntrinsicHeight}px`
-          }} 
+          style={{ height: `${currentIntrinsicHeight}px` }} 
         >
           <span className="text-[var(--bg-color)]/90 text-lg sm:text-xl md:text-2xl font-semibold">
             {cfg.name ?? 'Our Store'}
