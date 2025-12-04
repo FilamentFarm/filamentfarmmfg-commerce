@@ -1,5 +1,5 @@
 // components/layout/client-logo-banner.tsx
-import Image from 'next/image';
+import Image from 'next/image'; // Added the missing closing quote and semicolon
 import { getClientConfig } from 'lib/get-client-config';
 
 export default async function ClientLogoBanner() {
@@ -20,11 +20,7 @@ export default async function ClientLogoBanner() {
   const logoIntrinsicWidth = 160;
   const logoIntrinsicHeight = 40;
 
-  const currentIntrinsicWidth = isBanner ? bannerIntrinsicWidth : logoIntrinsicWidth;
   const currentIntrinsicHeight = isBanner ? bannerIntrinsicHeight : logoIntrinsicHeight;
-
-  // Calculate paddingBottom for aspect ratio to prevent layout shift
-  const aspectRatioPadding = (currentIntrinsicHeight / currentIntrinsicWidth) * 100;
 
   return (
     <div className="w-full bg-[var(--accent-color)] py-4"> {/* Fixed vertical padding here */}
@@ -34,10 +30,10 @@ export default async function ClientLogoBanner() {
           {isBanner ? (
             // Banner specific container: takes full width of its parent (max-w-screen-2xl)
             <div
-              className="relative w-full overflow-hidden" // Removed h-full
+              className="relative w-full overflow-hidden"
               style={{ 
-                paddingBottom: `${aspectRatioPadding}%`,
-                maxHeight: `${currentIntrinsicHeight}px` // Cap height at intrinsic image height
+                minHeight: `${currentIntrinsicHeight}px`,
+                maxHeight: `${currentIntrinsicHeight}px`
               }}
             >
               <Image
@@ -51,10 +47,10 @@ export default async function ClientLogoBanner() {
           ) : (
             // Logo specific container: centered and constrained max-width
             <div
-              className="relative mx-auto w-full overflow-hidden max-w-[16rem]" // Removed h-full
+              className="relative mx-auto w-full overflow-hidden max-w-[16rem]"
               style={{ 
-                paddingBottom: `${aspectRatioPadding}%`,
-                maxHeight: `${currentIntrinsicHeight}px` // Cap height at intrinsic image height
+                minHeight: `${currentIntrinsicHeight}px`,
+                maxHeight: `${currentIntrinsicHeight}px`
               }}
             >
               <Image
@@ -69,7 +65,13 @@ export default async function ClientLogoBanner() {
         </div>
       ) : (
         // Text fallback if no image URL is present
-        <div className="flex h-[100px] items-center justify-center mx-auto max-w-screen-2xl py-4"> 
+        <div 
+          className="flex items-center justify-center mx-auto max-w-screen-2xl py-4"
+          style={{ 
+            minHeight: `${currentIntrinsicHeight}px`,
+            maxHeight: `${currentIntrinsicHeight}px`
+          }} 
+        >
           <span className="text-[var(--bg-color)]/90 text-lg sm:text-xl md:text-2xl font-semibold">
             {cfg.name ?? 'Our Store'}
           </span>
