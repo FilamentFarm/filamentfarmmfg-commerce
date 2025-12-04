@@ -15,7 +15,7 @@ export default async function ClientLogoBanner() {
 
   // Define intrinsic heights. These will directly control the container's height.
   const bannerIntrinsicHeight = 300;
-  const logoIntrinsicHeight = 80;  
+  const logoIntrinsicHeight = 200;  
 
   const currentIntrinsicHeight = isBanner ? bannerIntrinsicHeight : logoIntrinsicHeight;
 
