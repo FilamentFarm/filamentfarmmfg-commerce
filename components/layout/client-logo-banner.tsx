@@ -1,5 +1,5 @@
 // components/layout/client-logo-banner.tsx
-import Image from 'next/image'; // Added the missing closing quote and semicolon
+import Image from 'next/image';
 import { getClientConfig } from 'lib/get-client-config';
 
 export default async function ClientLogoBanner() {
@@ -14,18 +14,13 @@ export default async function ClientLogoBanner() {
   const imageUrl = isBanner ? cfg.bannerUrl : cfg.logoUrl;
   const imageAlt = cfg.name ? (isBanner ? `${cfg.name} banner` : `${cfg.name} logo`) : 'Client Branding';
 
-  // Define intrinsic sizes for aspect ratio calculations and max-height capping.
-  // These should roughly match the actual dimensions of your images.
+  // Define intrinsic sizes. These should roughly match the actual dimensions of your images.
   const bannerIntrinsicWidth = 1200;
   const bannerIntrinsicHeight = 300;
   const logoIntrinsicWidth = 160;
   const logoIntrinsicHeight = 40;
 
-  const currentIntrinsicWidth = isBanner ? bannerIntrinsicWidth : logoIntrinsicWidth;
   const currentIntrinsicHeight = isBanner ? bannerIntrinsicHeight : logoIntrinsicHeight;
-
-  // Calculate paddingBottom for aspect ratio to prevent layout shift
-  const aspectRatioPadding = (currentIntrinsicHeight / currentIntrinsicWidth) * 100;
 
   return (
     <div className="w-full bg-[var(--accent-color)] py-4"> {/* Fixed vertical padding here */}
@@ -35,11 +30,8 @@ export default async function ClientLogoBanner() {
           {isBanner ? (
             // Banner specific container: takes full width of its parent (max-w-screen-2xl)
             <div
-              className="relative w-full overflow-hidden"
-              style={{ 
-                paddingBottom: `${aspectRatioPadding}%`,
-                maxHeight: `${currentIntrinsicHeight}px` // Cap height at intrinsic image height
-              }}
+              className="relative w-full h-full overflow-hidden"
+              style={{ maxHeight: `${currentIntrinsicHeight}px` }} // Cap height at intrinsic image height
             >
               <Image
                 src={imageUrl}
@@ -52,11 +44,8 @@ export default async function ClientLogoBanner() {
           ) : (
             // Logo specific container: centered and constrained max-width
             <div
-              className="relative mx-auto w-full overflow-hidden max-w-[16rem]" // Reverted max-w-xs to max-w-[16rem] (256px) for logos
-              style={{ 
-                paddingBottom: `${aspectRatioPadding}%`,
-                maxHeight: `${currentIntrinsicHeight}px` // Cap height at intrinsic image height
-              }}
+              className="relative mx-auto w-full h-full overflow-hidden max-w-[16rem]" // Max width for the logo container
+              style={{ maxHeight: `${currentIntrinsicHeight}px` }} // Cap height at intrinsic image height
             >
               <Image
                 src={imageUrl}
