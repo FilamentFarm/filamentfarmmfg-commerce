@@ -37,15 +37,15 @@ export const CLIENT_CONFIGS: Record<string, ClientConfig> = {
     name: "Monsters Inc.",
     logoUrl: "/logos/monstersinc.png",
     theme: {
-      primaryColor: "#045B5D",
+      primaryColor: "#343434ff",
       backgroundColor: "#575757",
       textColor: "#ffffff",
-      productPageBackground: "#f3f3f3",
+      productPageBackground: "#575757",
       productButtonColor: "#2a5298",
       productButtonHoverColor: "#1e3a8a",
       productCardBorderWidth: "1px"
     },
-    shopifyCollectionHandle: "client-monstersinc"
+    shopifyCollectionHandle: "monsters-inc"
   },
 
   micosminis: {
@@ -58,7 +58,7 @@ export const CLIENT_CONFIGS: Record<string, ClientConfig> = {
       textColor: "#ffffff",
       productPageBackground: "#110805",
       productButtonColor: "#be4e00",
-      productButtonHoverColor: "712e00",
+      productButtonHoverColor: "#712e00",
       productCardBorderWidth: "1px"
     },
     shopifyCollectionHandle: "micos-minis"

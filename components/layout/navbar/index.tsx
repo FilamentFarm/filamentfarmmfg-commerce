@@ -16,13 +16,19 @@ export function Navbar({ client }: { client: ClientConfig }) {
     >
       <div className="flex w-full items-center">
         <div className="flex w-full md:w-1/3">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
             <BrandHomeButton client={client} />
             <Link
               href={`/search/all`}
               className="text-neutral-500 underline-offset-4 hover:text-black hover:underline dark:text-neutral-400 dark:hover:text-neutral-300"
             >
               All Products
+            </Link>
+            <Link
+              href="/contact"
+              className="text-neutral-500 underline-offset-4 hover:text-black hover:underline dark:text-neutral-400 dark:hover:text-neutral-300"
+            >
+              Contact
             </Link>
           </div>
         </div>
