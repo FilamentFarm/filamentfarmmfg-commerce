@@ -5,6 +5,12 @@ import { getCollectionProducts } from 'lib/shopify';
 import type { Product } from 'lib/shopify/types';
 import Link from 'next/link';
 
+function pickRandomProducts(items: Product[], count: number): Product[] {
+  // Shallow copy to avoid mutating source array, then shuffle.
+  const shuffled = [...items].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, Math.min(count, shuffled.length));
+}
+
 function ThreeItemGridItem({
   item,
   size,
@@ -54,18 +60,20 @@ export async function ThreeItemGrid() {
 
   if (!products.length) return null;
 
+  const featured = pickRandomProducts(products, 3);
+
   return (
     <section
       className="mx-auto grid max-w-(--breakpoint-2xl) gap-4 px-4 pt-6 pb-4 md:grid-cols-6 md:grid-rows-2"
       style={{ backgroundColor: client?.theme.backgroundColor }}
     >
-      {products[0] && (
-        <ThreeItemGridItem size="full" item={products[0]} priority={true} />
+      {featured[0] && (
+        <ThreeItemGridItem size="full" item={featured[0]} priority={true} />
       )}
-      {products[1] && (
-        <ThreeItemGridItem size="half" item={products[1]} priority={true} />
+      {featured[1] && (
+        <ThreeItemGridItem size="half" item={featured[1]} priority={true} />
       )}
-      {products[2] && <ThreeItemGridItem size="half" item={products[2]} />}
+      {featured[2] && <ThreeItemGridItem size="half" item={featured[2]} />}
     </section>
   );
 }
