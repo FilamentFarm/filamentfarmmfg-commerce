@@ -5,9 +5,6 @@ import { getCollectionProducts } from 'lib/shopify';
 import type { Product } from 'lib/shopify/types';
 import Link from 'next/link';
 
-// Global cap on the hero grid height to prevent overly tall layouts
-const MAX_GRID_HEIGHT_PX = 720;
-
 function ThreeItemGridItem({
   item,
   size,
@@ -20,22 +17,20 @@ function ThreeItemGridItem({
   const img = item.featuredImage;
 
   return (
-    <div
-      className={`${size === 'full' ? 'md:col-span-4 md:row-span-2' : 'md:col-span-2 md:row-span-1'} h-full`}
-    >
+    <div className={size === 'full' ? 'md:col-span-4 md:row-span-2' : 'md:col-span-2 md:row-span-1'}>
       <Link
         href={`/product/${item.handle}`}
         prefetch={true}
-        // Remove forced square/height so intrinsic sizing can work
-        className="relative block h-full w-full"
+        // ƒªØ‹,? Remove forced square/height so intrinsic sizing can work
+        className="relative block w-full"
       >
         <GridTileImage
           src={img.url}
           alt={img.altText ?? item.title}
-          // Pass real dimensions to enable intrinsic mode
+          // ƒªØ‹,? Pass real dimensions to enable intrinsic mode
           width={img.width}
           height={img.height}
-          // Keep sizes logic; can be tuned later if desired
+          // Keep sizes logic ƒ?" can be tuned later if desired
           sizes={
             size === 'full' ? '(min-width: 768px) 66vw, 100vw' : '(min-width: 768px) 33vw, 100vw'
           }
@@ -46,7 +41,6 @@ function ThreeItemGridItem({
             amount: item.priceRange.maxVariantPrice.amount,
             currencyCode: item.priceRange.maxVariantPrice.currencyCode
           }}
-          className="h-full"
         />
       </Link>
     </div>
@@ -62,11 +56,8 @@ export async function ThreeItemGrid() {
 
   return (
     <section
-      className="mx-auto grid max-w-(--breakpoint-2xl) gap-4 px-4 pb-4 md:grid-cols-6 md:grid-rows-[repeat(2,minmax(0,1fr))]"
-      style={{
-        backgroundColor: client?.theme.backgroundColor,
-        height: `min(70vw, ${MAX_GRID_HEIGHT_PX}px)`
-      }}
+      className="mx-auto grid max-w-(--breakpoint-2xl) gap-4 px-4 pb-4 md:grid-cols-6 md:grid-rows-2"
+      style={{ backgroundColor: client?.theme.backgroundColor }}
     >
       {products[0] && (
         <ThreeItemGridItem size="full" item={products[0]} priority={true} />

@@ -1,12 +1,12 @@
-import ClientLogoBanner from 'components/layout/client-logo-banner';
-import { ThreeItemGrid } from 'components/grid/three-items';
-import Footer from 'components/layout/footer';
-import { getClientConfig } from 'lib/get-client-config';
-import { notFound } from 'next/navigation';
-import { getCollectionProducts } from 'lib/shopify';
-import ProductGridItems from 'components/layout/product-grid-items';
 import Grid from 'components/grid';
+import { ThreeItemGrid } from 'components/grid/three-items';
+import ClientLogoBanner from 'components/layout/client-logo-banner';
+import Footer from 'components/layout/footer';
+import ProductGridItems from 'components/layout/product-grid-items';
+import { getClientConfig } from 'lib/get-client-config';
+import { getCollectionProducts } from 'lib/shopify';
 import Link from 'next/link';
+import { notFound } from 'next/navigation';
 import type { CSSProperties } from 'react';
 
 export const metadata = {
