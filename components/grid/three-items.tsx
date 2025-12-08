@@ -6,7 +6,7 @@ import type { Product } from 'lib/shopify/types';
 import Link from 'next/link';
 
 // Clamp the hero (largest) tile height so big images don't blow out the layout
-const HERO_MAX_HEIGHT = 'min(70vw, 560px)';
+const HERO_HEIGHT = 'clamp(320px, 70vw, 560px)';
 
 function pickRandomProducts(items: Product[], count: number): Product[] {
   // Shallow copy to avoid mutating source array, then shuffle.
@@ -28,7 +28,7 @@ function ThreeItemGridItem({
   return (
     <div
       className={size === 'full' ? 'md:col-span-4 md:row-span-2' : 'md:col-span-2 md:row-span-1'}
-      style={size === 'full' ? { maxHeight: HERO_MAX_HEIGHT } : undefined}
+      style={size === 'full' ? { height: HERO_HEIGHT, overflow: 'hidden' } : undefined}
     >
       <Link
         href={`/product/${item.handle}`}
