@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Footer from 'components/layout/footer';
 import { getClientConfig } from 'lib/get-client-config';
 import { notFound } from 'next/navigation';
 
@@ -16,25 +17,28 @@ export default async function ContactPage() {
   const text = client.theme.textColor;
 
   return (
-    <section
-      className="mx-auto max-w-screen-2xl px-4 py-10 md:py-14"
-      style={{ backgroundColor: bg, color: text }}
-    >
-      <div className="grid gap-10 md:grid-cols-[1.2fr_0.8fr]">
-        <div className="space-y-6">
+    <>
+      <section
+        className="mx-auto max-w-screen-2xl px-4 py-10 md:py-14"
+        style={{ backgroundColor: bg, color: text }}
+      >
+        <div className="mx-auto flex max-w-3xl flex-col items-center gap-6 text-center">
           <p
             className="inline-block rounded-full px-4 py-2 text-sm font-semibold"
             style={{ backgroundColor: accent, color: '#ffffff' }}
           >
             Contact {client.name}
           </p>
-          <h1 className="text-4xl font-bold md:text-5xl">We&apos;re here to help</h1>
-          <p className="text-lg text-neutral-300">
+          <h1 className="text-4xl font-bold md:text-5xl">Contact {client.name}</h1>
+          <p className="text-base font-semibold text-neutral-300">
+            We&apos;re here to help.
+          </p>
+          <p className="max-w-2xl text-lg text-neutral-300">
             Questions about products, manufacturing, or your order? Drop us a note and we&apos;ll
             get back within one business day.
           </p>
 
-          <form className="space-y-4 rounded-2xl bg-white/5 p-6 backdrop-blur">
+          <form className="w-full max-w-2xl space-y-4 rounded-2xl bg-white/5 p-6 text-left backdrop-blur">
             <div className="grid gap-4 md:grid-cols-2">
               <label className="space-y-2 text-sm font-medium">
                 <span>Name</span>
@@ -86,42 +90,19 @@ export default async function ContactPage() {
             >
               Send message
             </button>
-            <p className="text-xs text-neutral-400">
-              This form is a placeholder. We can wire it to email or your CRM next.
+            <p className="text-center text-xs text-neutral-400">
+              This form is a placeholder. We can wire it to email or your CRM next. Need help now?{' '}
+              <Link
+                href="mailto:support@filamentfarmmfg.com"
+                className="text-white underline underline-offset-4"
+              >
+                support@filamentfarmmfg.com
+              </Link>
             </p>
           </form>
         </div>
-
-        <div className="space-y-6 rounded-2xl border border-white/10 bg-black/30 p-6 text-sm text-neutral-200">
-          <div>
-            <h2 className="text-lg font-semibold text-white">Support</h2>
-            <p className="mt-1 text-neutral-300">
-              Email us anytime and we&apos;ll reply within one business day.
-            </p>
-            <Link
-              href="mailto:support@filamentfarmmfg.com"
-              className="mt-2 inline-block text-white underline underline-offset-4"
-            >
-              support@filamentfarmmfg.com
-            </Link>
-          </div>
-
-          <div className="border-t border-white/10 pt-4">
-            <h2 className="text-lg font-semibold text-white">Order questions</h2>
-            <p className="mt-1 text-neutral-300">
-              For order status or returns, include your order number so we can assist faster.
-            </p>
-          </div>
-
-          <div className="border-t border-white/10 pt-4">
-            <h2 className="text-lg font-semibold text-white">Partnerships</h2>
-            <p className="mt-1 text-neutral-300">
-              Interested in hosting your products on Filament Farm MFG? Let us know and we&apos;ll
-              schedule a quick call.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
+      </section>
+      <Footer />
+    </>
   );
 }
