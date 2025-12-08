@@ -23,12 +23,6 @@ export default async function ContactPage() {
         style={{ backgroundColor: bg, color: text }}
       >
         <div className="mx-auto flex max-w-3xl flex-col items-center gap-6 text-center">
-          <p
-            className="inline-block rounded-full px-4 py-2 text-sm font-semibold"
-            style={{ backgroundColor: accent, color: '#ffffff' }}
-          >
-            Contact {client.name}
-          </p>
           <h1 className="text-4xl font-bold md:text-5xl">Contact {client.name}</h1>
           <p className="text-base font-semibold text-neutral-300">
             We&apos;re here to help.
@@ -38,7 +32,7 @@ export default async function ContactPage() {
             get back within one business day.
           </p>
 
-          <form className="w-full max-w-2xl space-y-4 rounded-2xl bg-white/5 p-6 text-left backdrop-blur">
+          <form className="w-full max-w-2xl space-y-4 rounded-2xl bg-white/5 p-6 text-left backdrop-blur pb-12">
             <div className="grid gap-4 md:grid-cols-2">
               <label className="space-y-2 text-sm font-medium">
                 <span>Name</span>
