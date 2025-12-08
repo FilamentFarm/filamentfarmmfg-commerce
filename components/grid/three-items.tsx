@@ -5,6 +5,9 @@ import { getCollectionProducts } from 'lib/shopify';
 import type { Product } from 'lib/shopify/types';
 import Link from 'next/link';
 
+// Clamp the hero (largest) tile height so big images don't blow out the layout
+const HERO_MAX_HEIGHT = 'min(70vw, 560px)';
+
 function pickRandomProducts(items: Product[], count: number): Product[] {
   // Shallow copy to avoid mutating source array, then shuffle.
   const shuffled = [...items].sort(() => Math.random() - 0.5);
@@ -23,12 +26,15 @@ function ThreeItemGridItem({
   const img = item.featuredImage;
 
   return (
-    <div className={size === 'full' ? 'md:col-span-4 md:row-span-2' : 'md:col-span-2 md:row-span-1'}>
+    <div
+      className={size === 'full' ? 'md:col-span-4 md:row-span-2' : 'md:col-span-2 md:row-span-1'}
+      style={size === 'full' ? { maxHeight: HERO_MAX_HEIGHT } : undefined}
+    >
       <Link
         href={`/product/${item.handle}`}
         prefetch={true}
         // ƒªØ‹,? Remove forced square/height so intrinsic sizing can work
-        className="relative block w-full"
+        className="relative block h-full w-full"
       >
         <GridTileImage
           src={img.url}
@@ -41,6 +47,7 @@ function ThreeItemGridItem({
             size === 'full' ? '(min-width: 768px) 66vw, 100vw' : '(min-width: 768px) 33vw, 100vw'
           }
           priority={priority}
+          className="h-full"
           label={{
             position: size === 'full' ? 'center' : 'bottom',
             title: item.title,
