@@ -32,7 +32,7 @@ export default async function ContactPage() {
             get back within one business day.
           </p>
 
-          <form className="w-full max-w-2xl space-y-4 rounded-2xl bg-white/5 p-6 text-left backdrop-blur pb-12">
+          <form className="w-full max-w-2xl space-y-4 rounded-2xl bg-white/5 p-6 text-left backdrop-blur">
             <div className="grid gap-4 md:grid-cols-2">
               <label className="space-y-2 text-sm font-medium">
                 <span>Name</span>
@@ -40,8 +40,7 @@ export default async function ContactPage() {
                   type="text"
                   name="name"
                   required
-                  className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-white placeholder:text-neutral-500 focus:border-white/40 focus:outline-none"
-                  placeholder="Jane Doe"
+                  className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-white focus:border-white/40 focus:outline-none"
                 />
               </label>
               <label className="space-y-2 text-sm font-medium">
@@ -50,8 +49,7 @@ export default async function ContactPage() {
                   type="email"
                   name="email"
                   required
-                  className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-white placeholder:text-neutral-500 focus:border-white/40 focus:outline-none"
-                  placeholder="you@example.com"
+                  className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-white focus:border-white/40 focus:outline-none"
                 />
               </label>
             </div>
@@ -60,8 +58,7 @@ export default async function ContactPage() {
               <input
                 type="text"
                 name="subject"
-                className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-white placeholder:text-neutral-500 focus:border-white/40 focus:outline-none"
-                placeholder="How can we help?"
+                className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-white focus:border-white/40 focus:outline-none"
               />
             </label>
             <label className="space-y-2 text-sm font-medium">
@@ -70,8 +67,7 @@ export default async function ContactPage() {
                 name="message"
                 rows={5}
                 required
-                className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-white placeholder:text-neutral-500 focus:border-white/40 focus:outline-none"
-                placeholder="Tell us a bit about what you need."
+                className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-white focus:border-white/40 focus:outline-none"
               />
             </label>
             <button
@@ -96,6 +92,7 @@ export default async function ContactPage() {
           </form>
         </div>
       </section>
+      <div className="pb-12" />
       <Footer />
     </>
   );
