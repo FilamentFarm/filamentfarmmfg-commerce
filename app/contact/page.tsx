@@ -87,7 +87,7 @@ export default async function ContactPage() {
           </form>
         </div>
       </section>
-      <div className="pb-12" />
+      <div className="pb-30" />
       <Footer />
     </>
   );
