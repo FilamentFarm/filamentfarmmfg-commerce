@@ -1,6 +1,5 @@
 import Footer from 'components/layout/footer';
 import { getClientConfig } from 'lib/get-client-config';
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 export const metadata = {
@@ -32,7 +31,7 @@ export default async function ContactPage() {
             get back within one business day.
           </p>
 
-          <form className="w-full max-w-2xl space-y-4 rounded-2xl bg-white/5 p-6 text-left backdrop-blur pb-12">
+          <form className="w-full max-w-2xl space-y-4 rounded-2xl bg-white/5 p-6 text-left backdrop-blur">
             <div className="grid gap-4 md:grid-cols-2">
               <label className="space-y-2 text-sm font-medium">
                 <span>Name</span>
@@ -84,18 +83,11 @@ export default async function ContactPage() {
             >
               Send message
             </button>
-            <p className="text-center text-xs text-neutral-400">
-              This form is a placeholder. We can wire it to email or your CRM next. Need help now?{' '}
-              <Link
-                href="mailto:support@filamentfarmmfg.com"
-                className="text-white underline underline-offset-4"
-              >
-                support@filamentfarmmfg.com
-              </Link>
-            </p>
+            
           </form>
         </div>
       </section>
+      <div className="pb-12" />
       <Footer />
     </>
   );
