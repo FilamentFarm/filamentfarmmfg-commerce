@@ -6,8 +6,9 @@ import type { Product } from 'lib/shopify/types';
 import Link from 'next/link';
 import type { CSSProperties } from 'react';
 
-// Adjust this to cap the hero image height; only affects images taller than this.
-const HERO_MAX_HEIGHT_PX = 800;
+// Adjust this to set the hero image height cap. Images shorter than this will scale up to fill it.
+const HERO_MAX_HEIGHT_PX = 560;
+const HERO_HEIGHT_CSS = `min(70vw, ${HERO_MAX_HEIGHT_PX}px)`;
 
 function pickRandomProducts(items: Product[], count: number): Product[] {
   const shuffled = [...items].sort(() => Math.random() - 0.5);
@@ -29,7 +30,7 @@ function ThreeItemHeroTile({
 
   const tileStyle: CSSProperties =
     variant === 'hero'
-      ? { aspectRatio, maxHeight: `${HERO_MAX_HEIGHT_PX}px` }
+      ? { aspectRatio, height: HERO_HEIGHT_CSS, maxHeight: HERO_HEIGHT_CSS }
       : { aspectRatio };
 
   return (
