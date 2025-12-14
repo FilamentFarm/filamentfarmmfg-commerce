@@ -65,13 +65,13 @@ export async function ThreeItemGrid() {
       className="mx-auto max-w-(--breakpoint-2xl) px-4 pt-6 pb-4"
       style={{ backgroundColor: client?.theme.backgroundColor }}
     >
-      <div className="grid gap-4 md:grid-cols-[2fr_1fr] md:items-center">
+      <div className="flex flex-col gap-4 md:flex-row md:items-center">
         {featured[0] && (
-          <div className="h-full">
+          <div className="md:flex-[2] flex-1">
             <ThreeItemGridItem size="hero" item={featured[0]} priority />
           </div>
         )}
-        <div className="flex h-full flex-col gap-4 justify-center">
+        <div className="md:flex-1 flex flex-col gap-4 justify-center self-center w-full">
           {featured[1] && (
             <ThreeItemGridItem size="side" item={featured[1]} priority />
           )}
