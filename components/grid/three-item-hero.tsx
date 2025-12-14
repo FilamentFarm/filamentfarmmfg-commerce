@@ -7,7 +7,7 @@ import Link from 'next/link';
 import type { CSSProperties } from 'react';
 
 // Adjust this to cap the hero image height; only affects images taller than this.
-const HERO_MAX_HEIGHT_PX = 560;
+const HERO_MAX_HEIGHT_PX = 800;
 
 function pickRandomProducts(items: Product[], count: number): Product[] {
   const shuffled = [...items].sort(() => Math.random() - 0.5);
