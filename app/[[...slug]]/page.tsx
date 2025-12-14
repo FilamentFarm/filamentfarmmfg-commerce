@@ -1,5 +1,5 @@
 import Grid from 'components/grid';
-import { ThreeItemGrid } from 'components/grid/three-items';
+import { ThreeItemHero } from 'components/grid/three-item-hero';
 import ClientLogoBanner from 'components/layout/client-logo-banner';
 import Footer from 'components/layout/footer';
 import ProductGridItems from 'components/layout/product-grid-items';
@@ -32,7 +32,7 @@ export default async function HomePage() {
   return (
     <>
       <ClientLogoBanner />
-      <ThreeItemGrid />
+      <ThreeItemHero />
 
       {/* New Product Grid Section */}
       {productsToShow.length > 0 && (
