@@ -11,7 +11,7 @@ import type { CSSProperties } from 'react';
 
 export const metadata = {
   description:
-    'High-performance ecommerce store built with Next.js, Vercel, and Shopify.',
+    'Partnered with Filament Farm MFG for on-demand manufacturing and fulfillment.',
   openGraph: { type: 'website' }
 };
 
