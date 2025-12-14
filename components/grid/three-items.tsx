@@ -16,62 +16,68 @@ function ThreeItemGridItem({
   priority
 }: {
   item: Product;
-  size: 'full' | 'half';
+  size: 'hero' | 'side';
   priority?: boolean;
 }) {
   const img = item.featuredImage;
 
   return (
-    <div className={size === 'full' ? 'md:col-span-4 md:row-span-2' : 'md:col-span-2 md:row-span-1'}>
-      <Link
-        href={`/product/${item.handle}`}
-        prefetch={true}
-        // ƒªØ‹,? Remove forced square/height so intrinsic sizing can work
-        className="relative block w-full"
-      >
-        <GridTileImage
-          src={img.url}
-          alt={img.altText ?? item.title}
-          // ƒªØ‹,? Pass real dimensions to enable intrinsic mode
-          width={img.width}
-          height={img.height}
-          // Keep sizes logic ƒ?" can be tuned later if desired
-          sizes={
-            size === 'full' ? '(min-width: 768px) 66vw, 100vw' : '(min-width: 768px) 33vw, 100vw'
-          }
-          priority={priority}
-          label={{
-            position: size === 'full' ? 'center' : 'bottom',
-            title: item.title,
-            amount: item.priceRange.maxVariantPrice.amount,
-            currencyCode: item.priceRange.maxVariantPrice.currencyCode
-          }}
-        />
-      </Link>
-    </div>
+    <Link
+      href={`/product/${item.handle}`}
+      prefetch={true}
+      className={`relative block w-full ${size === 'hero' ? 'h-full' : 'h-full'}`}
+    >
+      <GridTileImage
+        src={img.url}
+        alt={img.altText ?? item.title}
+        width={img.width}
+        height={img.height}
+        sizes={
+          size === 'hero'
+            ? '(min-width: 768px) 66vw, 100vw'
+            : '(min-width: 768px) 33vw, 100vw'
+        }
+        priority={priority}
+        label={{
+          position: 'bottom',
+          title: item.title,
+          amount: item.priceRange.maxVariantPrice.amount,
+          currencyCode: item.priceRange.maxVariantPrice.currencyCode
+        }}
+        className="h-full w-full"
+      />
+    </Link>
   );
 }
 
 export async function ThreeItemGrid() {
   const client = await getClientConfig();
-  const collection = client?.shopifyCollectionHandle ?? 'hidden-homepage-featured-items';
+  const collection =
+    client?.shopifyCollectionHandle ?? 'hidden-homepage-featured-items';
   const products = await getCollectionProducts({ collection });
-  const featured = pickRandomProducts(products, 3);
 
   if (!products.length) return null;
 
+  const featured = pickRandomProducts(products, 3);
+
   return (
     <section
-      className="mx-auto grid max-w-(--breakpoint-2xl) gap-4 px-4 pt-6 pb-4 md:grid-cols-6 md:grid-rows-2"
+      className="mx-auto max-w-(--breakpoint-2xl) px-4 pt-6 pb-4"
       style={{ backgroundColor: client?.theme.backgroundColor }}
     >
-      {featured[0] && (
-        <ThreeItemGridItem size="full" item={featured[0]} priority={true} />
-      )}
-      {featured[1] && (
-        <ThreeItemGridItem size="half" item={featured[1]} priority={true} />
-      )}
-      {featured[2] && <ThreeItemGridItem size="half" item={featured[2]} />}
+      <div className="grid gap-4 md:grid-cols-[2fr_1fr] md:items-center">
+        {featured[0] && (
+          <div className="h-full">
+            <ThreeItemGridItem size="hero" item={featured[0]} priority />
+          </div>
+        )}
+        <div className="flex h-full flex-col gap-4 justify-center">
+          {featured[1] && (
+            <ThreeItemGridItem size="side" item={featured[1]} priority />
+          )}
+          {featured[2] && <ThreeItemGridItem size="side" item={featured[2]} />}
+        </div>
+      </div>
     </section>
   );
 }
