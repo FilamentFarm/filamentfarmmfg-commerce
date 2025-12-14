@@ -5,15 +5,6 @@ import { getCollectionProducts } from 'lib/shopify';
 import type { Product } from 'lib/shopify/types';
 import Link from 'next/link';
 
-// Clamp the hero (largest) tile height so big images don't blow out the layout
-const HERO_HEIGHT = 'clamp(320px, 70vw, 560px)';
-
-function pickRandomProducts(items: Product[], count: number): Product[] {
-  // Shallow copy to avoid mutating source array, then shuffle.
-  const shuffled = [...items].sort(() => Math.random() - 0.5);
-  return shuffled.slice(0, Math.min(count, shuffled.length));
-}
-
 function ThreeItemGridItem({
   item,
   size,
@@ -26,15 +17,12 @@ function ThreeItemGridItem({
   const img = item.featuredImage;
 
   return (
-    <div
-      className={size === 'full' ? 'md:col-span-4 md:row-span-2' : 'md:col-span-2 md:row-span-1'}
-      style={size === 'full' ? { height: HERO_HEIGHT, overflow: 'hidden' } : undefined}
-    >
+    <div className={size === 'full' ? 'md:col-span-4 md:row-span-2' : 'md:col-span-2 md:row-span-1'}>
       <Link
         href={`/product/${item.handle}`}
         prefetch={true}
         // ƒªØ‹,? Remove forced square/height so intrinsic sizing can work
-        className="relative block h-full w-full"
+        className="relative block w-full"
       >
         <GridTileImage
           src={img.url}
@@ -47,7 +35,6 @@ function ThreeItemGridItem({
             size === 'full' ? '(min-width: 768px) 66vw, 100vw' : '(min-width: 768px) 33vw, 100vw'
           }
           priority={priority}
-          className="h-full"
           label={{
             position: size === 'full' ? 'center' : 'bottom',
             title: item.title,
@@ -67,20 +54,18 @@ export async function ThreeItemGrid() {
 
   if (!products.length) return null;
 
-  const featured = pickRandomProducts(products, 3);
-
   return (
     <section
-      className="mx-auto grid max-w-(--breakpoint-2xl) gap-4 px-4 pt-6 pb-4 md:grid-cols-6 md:grid-rows-2"
+      className="mx-auto grid max-w-(--breakpoint-2xl) gap-4 px-4 pb-4 md:grid-cols-6 md:grid-rows-2"
       style={{ backgroundColor: client?.theme.backgroundColor }}
     >
-      {featured[0] && (
-        <ThreeItemGridItem size="full" item={featured[0]} priority={true} />
+      {products[0] && (
+        <ThreeItemGridItem size="full" item={products[0]} priority={true} />
       )}
-      {featured[1] && (
-        <ThreeItemGridItem size="half" item={featured[1]} priority={true} />
+      {products[1] && (
+        <ThreeItemGridItem size="half" item={products[1]} priority={true} />
       )}
-      {featured[2] && <ThreeItemGridItem size="half" item={featured[2]} />}
+      {products[2] && <ThreeItemGridItem size="half" item={products[2]} />}
     </section>
   );
 }
