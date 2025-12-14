@@ -4,9 +4,8 @@ import { getClientConfig } from 'lib/get-client-config';
 import { getCollectionProducts } from 'lib/shopify';
 import type { Product } from 'lib/shopify/types';
 import Link from 'next/link';
-import type { CSSProperties } from 'react';
 
-// Adjust this to set the hero image height cap. Images shorter than this will scale up to fill it.
+// Adjust this to set the hero image height cap; images scale up or down to fit within this.
 const HERO_MAX_HEIGHT_PX = 800;
 const HERO_HEIGHT_CSS = `min(70vw, ${HERO_MAX_HEIGHT_PX}px)`;
 
@@ -25,22 +24,18 @@ function ThreeItemHeroTile({
   priority?: boolean;
 }) {
   const img = product.featuredImage;
-  const aspectRatio =
-    img?.width && img?.height ? `${img.width}/${img.height}` : '4/5';
-
-  const tileStyle: CSSProperties =
-    variant === 'hero'
-      ? { aspectRatio, height: HERO_HEIGHT_CSS, maxHeight: HERO_HEIGHT_CSS }
-      : { aspectRatio };
-
   return (
     <div
       className={
         variant === 'hero'
-          ? 'md:col-span-4 md:row-span-2'
-          : 'md:col-span-2 md:row-span-1'
+          ? 'md:col-span-4 md:row-span-2 h-full'
+          : 'md:col-span-2 md:row-span-1 h-full'
       }
-      style={tileStyle}
+      style={
+        variant === 'hero'
+          ? { height: HERO_HEIGHT_CSS, maxHeight: HERO_HEIGHT_CSS }
+          : { height: '100%' }
+      }
     >
       <Link
         href={`/product/${product.handle}`}
@@ -63,7 +58,7 @@ function ThreeItemHeroTile({
             amount: product.priceRange.maxVariantPrice.amount,
             currencyCode: product.priceRange.maxVariantPrice.currencyCode
           }}
-          className="h-full"
+          className="h-full w-full"
         />
       </Link>
     </div>
@@ -82,8 +77,12 @@ export async function ThreeItemHero() {
 
   return (
     <section
-      className="mx-auto grid max-w-(--breakpoint-2xl) gap-4 px-4 pt-6 pb-4 md:grid-cols-6 md:grid-rows-2"
-      style={{ backgroundColor: client?.theme.backgroundColor }}
+      className="mx-auto grid max-w-(--breakpoint-2xl) gap-4 px-4 pt-6 pb-4 md:grid-cols-6 md:grid-rows-[repeat(2,minmax(0,1fr))]"
+      style={{
+        backgroundColor: client?.theme.backgroundColor,
+        height: HERO_HEIGHT_CSS,
+        maxHeight: HERO_HEIGHT_CSS
+      }}
     >
       {featured[0] && (
         <ThreeItemHeroTile product={featured[0]} variant="hero" priority />
