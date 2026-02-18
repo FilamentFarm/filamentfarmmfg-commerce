@@ -1,3 +1,4 @@
+import ContactForm from 'components/contact/contact-form';
 import Footer from 'components/layout/footer';
 import { getClientConfig } from 'lib/get-client-config';
 import { notFound } from 'next/navigation';
@@ -14,6 +15,9 @@ export default async function ContactPage() {
   const accent = client.theme.primaryColor;
   const bg = client.theme.backgroundColor;
   const text = client.theme.textColor;
+  const successMessage =
+    client.contact?.successMessage ||
+    `Thanks for contacting ${client.name}. We'll get back to you soon.`;
 
   return (
     <>
@@ -31,60 +35,7 @@ export default async function ContactPage() {
             get back within one business day.
           </p>
 
-          <form className="w-full max-w-2xl space-y-4 rounded-2xl bg-white/5 p-6 text-left backdrop-blur">
-            <div className="grid gap-4 md:grid-cols-2">
-              <label className="space-y-2 text-sm font-medium">
-                <span>Name</span>
-                <input
-                  type="text"
-                  name="name"
-                  required
-                  className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-white placeholder:text-neutral-500 focus:border-white/40 focus:outline-none"
-                  placeholder="Jane Doe"
-                />
-              </label>
-              <label className="space-y-2 text-sm font-medium">
-                <span>Email</span>
-                <input
-                  type="email"
-                  name="email"
-                  required
-                  className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-white placeholder:text-neutral-500 focus:border-white/40 focus:outline-none"
-                  placeholder="you@example.com"
-                />
-              </label>
-            </div>
-            <label className="space-y-2 text-sm font-medium">
-              <span>Subject</span>
-              <input
-                type="text"
-                name="subject"
-                className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-white placeholder:text-neutral-500 focus:border-white/40 focus:outline-none"
-                placeholder="How can we help?"
-              />
-            </label>
-            <label className="space-y-2 text-sm font-medium">
-              <span>Message</span>
-              <textarea
-                name="message"
-                rows={5}
-                required
-                className="w-full rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-white placeholder:text-neutral-500 focus:border-white/40 focus:outline-none"
-                placeholder="Tell us a bit about what you need."
-              />
-            </label>
-            <button
-              type="submit"
-              className="w-full rounded-xl px-4 py-3 text-lg font-semibold text-white transition hover:opacity-90"
-              style={{ backgroundColor: accent }}
-              disabled
-              aria-disabled="true"
-              title="Submitting is disabled in this demo"
-            >
-              Send message
-            </button>
-            
-          </form>
+          <ContactForm accentColor={accent} successMessage={successMessage} />
         </div>
       </section>
       <div className="pb-30" />

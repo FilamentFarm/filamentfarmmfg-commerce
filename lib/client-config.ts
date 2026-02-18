@@ -4,6 +4,7 @@ export type ClientConfig = {
   bannerUrl?: string; // Optional banner URL
   theme: ClientTheme;
   shopifyCollectionHandle: string;
+  contact?: ClientContactConfig;
 };
 
 export type ClientTheme = {
@@ -14,6 +15,12 @@ export type ClientTheme = {
   productButtonColor?: string;
   productButtonHoverColor?: string;
   productCardBorderWidth?: string;
+};
+
+export type ClientContactConfig = {
+  recipientEmail: string;
+  subjectPrefix?: string;
+  successMessage?: string;
 };
 
 export const CLIENT_CONFIGS: Record<string, ClientConfig> = {
@@ -30,7 +37,12 @@ export const CLIENT_CONFIGS: Record<string, ClientConfig> = {
       productButtonHoverColor: "#0068db",
       productCardBorderWidth: "1px"
     },
-    shopifyCollectionHandle: "client-kongclave"
+    shopifyCollectionHandle: "client-kongclave",
+    contact: {
+      recipientEmail: "contact+kongclave@filamentfarmmfg.com",
+      subjectPrefix: "[Kongclave Miniatures]",
+      successMessage: "Thanks for reaching out to Kongclave Miniatures. We'll reply shortly."
+    }
   },
 
   monstersinc: {
@@ -45,7 +57,12 @@ export const CLIENT_CONFIGS: Record<string, ClientConfig> = {
       productButtonHoverColor: "#1e3a8a",
       productCardBorderWidth: "1px"
     },
-    shopifyCollectionHandle: "monsters-inc"
+    shopifyCollectionHandle: "monsters-inc",
+    contact: {
+      recipientEmail: "contact+monstersinc@filamentfarmmfg.com",
+      subjectPrefix: "[Monsters Inc.]",
+      successMessage: "Thanks for contacting Monsters Inc. We'll get back to you soon."
+    }
   },
 
   micosminis: {
@@ -61,7 +78,12 @@ export const CLIENT_CONFIGS: Record<string, ClientConfig> = {
       productButtonHoverColor: "#712e00",
       productCardBorderWidth: "1px"
     },
-    shopifyCollectionHandle: "micos-minis"
+    shopifyCollectionHandle: "micos-minis",
+    contact: {
+      recipientEmail: "contact+micosminis@filamentfarmmfg.com",
+      subjectPrefix: "[Mico's Minis]",
+      successMessage: "Thanks for contacting Mico's Minis. We'll reply within one business day."
+    }
   }
 
   // Add more clients here as needed
