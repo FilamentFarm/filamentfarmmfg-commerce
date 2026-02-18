@@ -39,7 +39,7 @@ export const CLIENT_CONFIGS: Record<string, ClientConfig> = {
     },
     shopifyCollectionHandle: "client-kongclave",
     contact: {
-      recipientEmail: "nick@filamentfarmmfg.com",
+      recipientEmail: "nick@filamentfarm.net",
       subjectPrefix: "[Kongclave Miniatures]",
       successMessage: "Thanks for reaching out to Kongclave Miniatures. We'll reply shortly."
     }
