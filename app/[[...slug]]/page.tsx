@@ -5,15 +5,27 @@ import Footer from 'components/layout/footer';
 import ProductGridItems from 'components/layout/product-grid-items';
 import { getClientConfig } from 'lib/get-client-config';
 import { getCollectionProducts } from 'lib/shopify';
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { CSSProperties } from 'react';
 
-export const metadata = {
-  description:
-    'Partnered with Filament Farm MFG for on-demand manufacturing and fulfillment.',
-  openGraph: { type: 'website' }
-};
+// Per-tenant home-page metadata. The description used to be a single
+// hardcoded sentence shared by every client subdomain, which was bad for
+// SEO and bad for sharing previews. We now build the description from
+// the client name; any tenant without a config falls back to the generic
+// FFMFG copy.
+export async function generateMetadata(): Promise<Metadata> {
+  const client = await getClientConfig();
+  const description = client
+    ? `${client.name} — high-quality 3D printed products manufactured and fulfilled by Filament Farm MFG.`
+    : 'Partnered with Filament Farm MFG for on-demand manufacturing and fulfillment.';
+
+  return {
+    description,
+    openGraph: { type: 'website' }
+  };
+}
 
 export default async function HomePage() {
   const clientConfig = await getClientConfig();

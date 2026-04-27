@@ -45,12 +45,16 @@ function getSubdomainFromHost(hostHeader: string): string {
 }
 
 function resolveClientConfig(request: NextRequest): ClientConfig | null {
+  // Trust ONLY the Host header here. We previously also accepted a
+  // `client-subdomain` cookie as a fallback, but that cookie is unsigned
+  // and can be tampered with by a malicious client to mis-route their
+  // contact-form submission to a different tenant's recipient mailbox.
+  // The Host header is set by the browser/edge and cannot be spoofed by
+  // the JS client, so it is the only safe source of tenancy here.
   const subdomainFromHost = getSubdomainFromHost(request.headers.get('host') ?? '');
-  const subdomainFromCookie = request.cookies.get('client-subdomain')?.value ?? '';
-  const clientKey = subdomainFromHost || subdomainFromCookie;
 
-  if (clientKey && CLIENT_CONFIGS[clientKey]) {
-    return CLIENT_CONFIGS[clientKey];
+  if (subdomainFromHost && CLIENT_CONFIGS[subdomainFromHost]) {
+    return CLIENT_CONFIGS[subdomainFromHost];
   }
 
   return CLIENT_CONFIGS.default ?? null;

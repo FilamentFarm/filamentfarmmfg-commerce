@@ -5,9 +5,40 @@ import { getCollectionProducts } from 'lib/shopify';
 import type { Product } from 'lib/shopify/types';
 import Link from 'next/link';
 
-function pickRandomProducts(items: Product[], count: number): Product[] {
-  const shuffled = [...items].sort(() => Math.random() - 0.5);
-  return shuffled.slice(0, Math.min(count, shuffled.length));
+// Pick `count` items from the list, deterministically per UTC day.
+// Why not Math.random()?  pickRandomProducts() used to call Math.random()
+// inside a server component, which meant:
+//   1. SEO crawlers, social-media link-preview bots, and cache snapshots
+//      could each see a different trio of products on different fetches.
+//      That's bad for sharing previews and for consistent SEO signals.
+//   2. With React Server Component rendering + Vercel ISR, the picker
+//      runs on every request that bypasses cache, so the homepage
+//      "shuffles" in front of users who refresh.
+// Deterministic-per-day means the trio rotates daily (still feels fresh)
+// but stays stable across all requests within a single day, regardless
+// of region, cache state, or refresh.
+function pickDailyProducts(items: Product[], count: number): Product[] {
+  if (items.length <= count) return items.slice();
+
+  // Days since epoch — same value across all servers within a UTC day.
+  const day = Math.floor(Date.now() / (1000 * 60 * 60 * 24));
+
+  // Tiny linear-congruential PRNG seeded with the day number.
+  // Same seed → same shuffle, every time.
+  let state = day || 1;
+  const rand = () => {
+    state = (state * 1103515245 + 12345) & 0x7fffffff;
+    return state / 0x7fffffff;
+  };
+
+  // Fisher–Yates shuffle of indices, then take the first `count`.
+  const indices = items.map((_, i) => i);
+  for (let i = indices.length - 1; i > 0; i--) {
+    const j = Math.floor(rand() * (i + 1));
+    [indices[i], indices[j]] = [indices[j]!, indices[i]!];
+  }
+
+  return indices.slice(0, count).map((i) => items[i]!);
 }
 
 function ThreeItemGridItem({
@@ -58,7 +89,7 @@ export async function ThreeItemGrid() {
 
   if (!products.length) return null;
 
-  const featured = pickRandomProducts(products, 3);
+  const featured = pickDailyProducts(products, 3);
 
   return (
     <section

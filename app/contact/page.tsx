@@ -1,12 +1,21 @@
 import ContactForm from 'components/contact/contact-form';
 import Footer from 'components/layout/footer';
 import { getClientConfig } from 'lib/get-client-config';
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-export const metadata = {
-  title: 'Contact',
-  description: 'Get in touch with our team.'
-};
+// Per-tenant contact-page metadata. The page title becomes
+// "Contact <Client Name>" so the browser tab + share previews show the
+// brand the customer thinks they are contacting, not "Filament Farm MFG".
+export async function generateMetadata(): Promise<Metadata> {
+  const client = await getClientConfig();
+  const titleBase = client?.name || 'us';
+
+  return {
+    title: `Contact ${titleBase}`,
+    description: `Get in touch with ${client?.name || 'our team'}.`
+  };
+}
 
 export default async function ContactPage() {
   const client = await getClientConfig();

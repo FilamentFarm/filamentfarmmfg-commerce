@@ -1,75 +1,141 @@
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fcommerce&project-name=commerce&repo-name=commerce&demo-title=Next.js%20Commerce&demo-url=https%3A%2F%2Fdemo.vercel.store&demo-image=https%3A%2F%2Fbigcommerce-demo-asset-ksvtgfvnd.vercel.app%2Fbigcommerce.png&env=COMPANY_NAME,SHOPIFY_REVALIDATION_SECRET,SHOPIFY_STORE_DOMAIN,SHOPIFY_STOREFRONT_ACCESS_TOKEN,SITE_NAME)
+# Filament Farm MFG — Commerce Storefront
 
-# Next.js Commerce
+Headless e-commerce storefront for **Filament Farm MFG** and the marketplace
+clients it manufactures for. One Next.js app, one Shopify store, many client
+subdomains. Forked from [`vercel/commerce`](https://github.com/vercel/commerce).
 
-A high-performance, server-rendered Next.js App Router ecommerce application.
+> **Live:** [filamentfarmmfg.com](https://filamentfarmmfg.com)
+> **Example client storefront:** [kongclave.filamentfarmmfg.com](https://kongclave.filamentfarmmfg.com)
 
-This template uses React Server Components, Server Actions, `Suspense`, `useOptimistic`, and more.
+---
 
-<h3 id="v1-note"></h3>
+## Stack at a glance
 
-> Note: Looking for Next.js Commerce v1? View the [code](https://github.com/vercel/commerce/tree/v1), [demo](https://commerce-v1.vercel.store), and [release notes](https://github.com/vercel/commerce/releases/tag/v1).
+| Piece              | What it is                                                                  |
+| ------------------ | --------------------------------------------------------------------------- |
+| **Framework**      | Next.js 15 (App Router, React Server Components, React 19)                  |
+| **Styling**        | Tailwind v4 + Headless UI + Heroicons                                       |
+| **Data**           | Shopify Storefront API (`lib/shopify/`)                                     |
+| **Hosting**        | Vercel — auto-deploys on push to `main`                                     |
+| **Email**          | Resend (contact form, `app/api/contact/route.ts`)                           |
+| **Package mgr**    | pnpm (Vercel detects and uses `pnpm-lock.yaml`)                             |
 
-## Providers
+---
 
-Vercel will only be actively maintaining a Shopify version [as outlined in our vision and strategy for Next.js Commerce](https://github.com/vercel/commerce/pull/966).
+## How multi-tenancy works
 
-Vercel is ha  ppy to partner and work with any commerce provider to help them get a similar template up and running and listed below. Alternative providers should be able to fork this repository and swap out the `lib/shopify` file with their own implementation while leaving the rest of the template mostly unchanged.
+Every client gets their own subdomain (e.g. `kongclave.filamentfarmmfg.com`)
+that points at the same Vercel deployment. Routing flow:
 
-- Shopify (this repository)
-- [BigCommerce](https://github.com/bigcommerce/nextjs-commerce) ([Demo](https://next-commerce-v2.vercel.app/))
-- [Ecwid by Lightspeed](https://github.com/Ecwid/ecwid-nextjs-commerce/) ([Demo](https://ecwid-nextjs-commerce.vercel.app/))
-- [Geins](https://github.com/geins-io/vercel-nextjs-commerce) ([Demo](https://geins-nextjs-commerce-starter.vercel.app/))
-- [Medusa](https://github.com/medusajs/vercel-commerce) ([Demo](https://medusa-nextjs-commerce.vercel.app/))
-- [Prodigy Commerce](https://github.com/prodigycommerce/nextjs-commerce) ([Demo](https://prodigy-nextjs-commerce.vercel.app/))
-- [Saleor](https://github.com/saleor/nextjs-commerce) ([Demo](https://saleor-commerce.vercel.app/))
-- [Shopware](https://github.com/shopwareLabs/vercel-commerce) ([Demo](https://shopware-vercel-commerce-react.vercel.app/))
-- [Swell](https://github.com/swellstores/verswell-commerce) ([Demo](https://verswell-commerce.vercel.app/))
-- [Umbraco](https://github.com/umbraco/Umbraco.VercelCommerce.Demo) ([Demo](https://vercel-commerce-demo.umbraco.com/))
-- [Wix](https://github.com/wix/headless-templates/tree/main/nextjs/commerce) ([Demo](https://wix-nextjs-commerce.vercel.app/))
-- [Fourthwall](https://github.com/FourthwallHQ/vercel-commerce) ([Demo](https://vercel-storefront.fourthwall.app/))
+1. **`middleware.ts`** reads the `Host` header on every request, extracts
+   the subdomain, validates it against `lib/client-config.ts`, and stamps a
+   `client-subdomain` cookie. Unknown subdomains 308-redirect to the root domain.
+2. **`lib/client-config.ts`** — the canonical client list. Each entry holds
+   the client's display name, logo path, theme colors, the Shopify
+   collection that contains their products, and contact-routing details.
+3. **`lib/get-client-config.ts`** — Server Component helper that reads the
+   cookie and returns the matching `ClientConfig`. Components and pages
+   that need client-specific behavior call this.
+4. **Layout & pages** read theme colors via CSS variables on `<body>`,
+   set in `app/layout.tsx`.
 
-> Note: Providers, if you are looking to use similar products for your demo, you can [download these assets](https://drive.google.com/file/d/1q_bKerjrwZgHwCw0ovfUMW6He9VtepO_/view?usp=sharing).
+The site is intended as the **entry-level / paid-tier** storefront for
+marketplace clients. A more white-glove tier with deeper customization
+will exist alongside this in the future.
 
-## Integrations
+---
 
-Integrations enable upgraded or additional functionality for Next.js Commerce
+## Adding a new client (current process)
 
-- [Orama](https://github.com/oramasearch/nextjs-commerce) ([Demo](https://vercel-commerce.oramasearch.com/))
+> **Caveat:** today this requires a code change + redeploy. We're moving to
+> Shopify metaobjects so onboarding becomes a no-deploy operation. Until
+> that ships, follow these steps.
 
-  - Upgrades search to include typeahead with dynamic re-rendering, vector-based similarity search, and JS-based configuration.
-  - Search runs entirely in the browser for smaller catalogs or on a CDN for larger.
+1. Drop the client's logo (and optional banner) into `public/logos/`.
+2. Open `lib/client-config.ts`, add a new entry to the `CLIENT_CONFIGS`
+   record. Key = subdomain. Required: `name`, `logoUrl`, `theme.*`,
+   `shopifyCollectionHandle`. Optional: `bannerUrl`, `contact.*`.
+3. In Shopify admin, create a Collection (Manual or Smart) with the handle
+   that matches `shopifyCollectionHandle`. Add the client's products.
+4. In your DNS provider, add a `CNAME` for `<subdomain>.filamentfarmmfg.com`
+   → `cname.vercel-dns.com`.
+5. In Vercel project settings → Domains, add `<subdomain>.filamentfarmmfg.com`
+   to the project.
+6. Commit + push. Vercel auto-deploys.
 
-- [React Bricks](https://github.com/ReactBricks/nextjs-commerce-rb) ([Demo](https://nextjs-commerce.reactbricks.com/))
-  - Edit pages, product details, and footer content visually using [React Bricks](https://www.reactbricks.com) visual headless CMS.
+---
 
-## Running locally
+## Local development
 
-You will need to use the environment variables [defined in `.env.example`](.env.example) to run Next.js Commerce. It's recommended you use [Vercel Environment Variables](https://vercel.com/docs/concepts/projects/environment-variables) for this, but a `.env` file is all that is necessary.
-
-> Note: You should not commit your `.env` file or it will expose secrets that will allow others to control your Shopify store.
-
-1. Install Vercel CLI: `npm i -g vercel`
-2. Link local instance with Vercel and GitHub accounts (creates `.vercel` directory): `vercel link`
-3. Download your environment variables: `vercel env pull`
+You don't need a local environment to make text or style edits — Vercel's
+preview deployments will render any branch you push. But if you want to
+preview locally:
 
 ```bash
 pnpm install
+cp .env.example .env.local
+# Fill in .env.local with values from Vercel project settings → Environment Variables
 pnpm dev
+# Open http://localhost:3000
 ```
 
-Your app should now be running on [localhost:3000](http://localhost:3000/).
+To test multi-tenant subdomain routing locally, you can point a fake
+hostname at localhost via your hosts file (e.g. `127.0.0.1 kongclave.localhost`)
+and visit `http://kongclave.localhost:3000`.
 
-<details>
-  <summary>Expand if you work at Vercel and want to run locally and / or contribute</summary>
+---
 
-1. Run `vc link`.
-1. Select the `Vercel Solutions` scope.
-1. Connect to the existing `commerce-shopify` project.
-1. Run `vc env pull` to get environment variables.
-1. Run `pnpm dev` to ensure everything is working correctly.
-</details>
+## Environment variables (in Vercel)
 
-## Vercel, Next.js Commerce, and Shopify Integration Guide
+| Variable                              | Purpose                                                  |
+| ------------------------------------- | -------------------------------------------------------- |
+| `SHOPIFY_STORE_DOMAIN`                | `*.myshopify.com` host                                   |
+| `SHOPIFY_STOREFRONT_ACCESS_TOKEN`     | Storefront-tier (public-safe) API token                  |
+| `SHOPIFY_STOREFRONT_VERSION`          | Storefront API version pin (default `2025-07`)           |
+| `SHOPIFY_REVALIDATION_SECRET`         | Shared secret for the `/api/revalidate` webhook          |
+| `RESEND_API_KEY`                      | Resend API key for contact-form emails                   |
+| `CONTACT_FROM_EMAIL`                  | "From" address for contact-form emails (must be verified)|
+| `SITE_NAME`                           | Fallback site name on the root domain                    |
+| `COMPANY_NAME`                        | Footer copyright owner                                   |
 
-You can use this comprehensive [integration guide](https://vercel.com/docs/integrations/ecommerce/shopify) with step-by-step instructions on how to configure Shopify as a headless CMS using Next.js Commerce as your headless Shopify storefront on Vercel.
+These live only in the Vercel dashboard. **Never commit a `.env.local` file.**
+
+---
+
+## Editing & deployment workflow
+
+This project is edited by Nick (non-coder) in collaboration with Claude in
+Cowork. The agreed-upon flow:
+
+1. Nick describes the desired change in chat.
+2. Claude edits files in this folder and proposes a commit message.
+3. Nick opens **GitHub Desktop**, reviews the diff, pastes the message,
+   clicks **Commit to main**, then **Push origin**.
+4. Vercel auto-deploys (~30–60 seconds).
+5. To roll back: GitHub Desktop → History → right-click commit → **Revert
+   this commit** → Push.
+
+> **Pull before edit.** At the start of every session, hit **Fetch origin**
+> in GitHub Desktop and pull if there are updates.
+
+---
+
+## Repo conventions
+
+- **Don't commit `.env*` files.** `.gitignore` excludes them.
+- **Don't commit license-partner STLs** or anything from the parent
+  `D:\3D Printing\` folders. None of that should ever live here.
+- **Keep both lockfiles?** No — `pnpm-lock.yaml` is the truth. If you ever
+  see a `package-lock.json` reappear, delete it.
+- **Commit messages** should describe the user-visible change in a sentence.
+  "Update home banner padding" beats "tweaks." A bot reads our git log
+  every session.
+
+---
+
+## Links
+
+- **Repo:** [github.com/FilamentFarm/filamentfarmmfg-commerce](https://github.com/FilamentFarm/filamentfarmmfg-commerce)
+- **Upstream template:** [vercel/commerce](https://github.com/vercel/commerce)
+- **Cowork session brief / "the brain":** `D:\3D Printing\My Designs\FF_Projects\CLAUDE.md`
+  (this is the canonical source of business + project context — not in this repo)

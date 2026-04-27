@@ -3,6 +3,7 @@ import { Navbar } from 'components/layout/navbar';
 import { GeistSans } from 'geist/font/sans';
 import { getCart } from 'lib/shopify';
 import { getClientConfig } from 'lib/get-client-config';
+import type { Metadata } from 'next';
 import { ReactNode } from 'react';
 import { Toaster } from 'sonner';
 import './globals.css';
@@ -11,17 +12,29 @@ import { ClientConfig } from 'lib/client-config';
 
 const { SITE_NAME } = process.env;
 
-export const metadata = {
-  metadataBase: new URL(baseUrl),
-  title: {
-    default: SITE_NAME!,
-    template: `%s | ${SITE_NAME}`
-  },
-  robots: {
-    follow: true,
-    index: true
-  }
-};
+// Per-tenant <title> and metadata. When a request comes in on
+// kongclave.filamentfarmmfg.com, the middleware sets a `client-subdomain`
+// cookie. getClientConfig() reads that cookie and returns the matching
+// client. We use the client name as the site name for both the default
+// document title and the `%s | <site>` template that child pages append to.
+// Falls back to the SITE_NAME env var (or a hardcoded default) for the
+// root domain and any non-tenant request.
+export async function generateMetadata(): Promise<Metadata> {
+  const client = await getClientConfig();
+  const siteName = client?.name || SITE_NAME || 'Filament Farm MFG';
+
+  return {
+    metadataBase: new URL(baseUrl),
+    title: {
+      default: siteName,
+      template: `%s | ${siteName}`
+    },
+    robots: {
+      follow: true,
+      index: true
+    }
+  };
+}
 
 const defaultClientConfig: ClientConfig = {
   name: 'Filament Farm MFG',
@@ -39,6 +52,11 @@ export default async function Layout({
 }: {
   children: ReactNode;
 }) {
+  // Note: intentionally NOT awaited. getCart() returns a Promise that we
+  // hand to <CartProvider> as `cartPromise`. The provider streams it to the
+  // client and resolves inside a Suspense boundary, which is the modern
+  // Next.js streaming pattern. Awaiting here would block the entire page
+  // render on the cart fetch.
   const cart = getCart();
   const clientFromConfig = await getClientConfig();
   const client = clientFromConfig || defaultClientConfig;
