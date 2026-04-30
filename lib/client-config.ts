@@ -86,5 +86,26 @@ export const CLIENT_CONFIGS: Record<string, ClientConfig> = {
     }
   }
 
+    printofthedead: {
+    name: "Print of the Dead",
+    logoUrl: "/logos/printofthedeadlogo.png",
+    bannerUrl: "/logos/printofthedeadlogo.png",
+    theme: {
+      primaryColor: "#110805",
+      backgroundColor: "#110805",
+      textColor: "#ffffff",
+      productPageBackground: "#110805",
+      productButtonColor: "#a21212",
+      productButtonHoverColor: "#580505",
+      productCardBorderWidth: "1px"
+    },
+    shopifyCollectionHandle: "print-of-the-dead",
+    contact: {
+      recipientEmail: "contact+printofthedead@filamentfarmmfg.com",
+      subjectPrefix: "[Print of the Dead]",
+      successMessage: "Thanks for contacting Print of the Dead. We'll reply within one business day."
+    }
+  }
+
   // Add more clients here as needed
 };
