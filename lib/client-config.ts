@@ -84,9 +84,9 @@ export const CLIENT_CONFIGS: Record<string, ClientConfig> = {
       subjectPrefix: "[Mico's Minis]",
       successMessage: "Thanks for contacting Mico's Minis. We'll reply within one business day."
     }
-  }
+  },
 
-    printofthedead: {
+  printofthedead: {
     name: "Print of the Dead",
     logoUrl: "/logos/printofthedeadlogo.png",
     bannerUrl: "/logos/printofthedeadlogo.png",
