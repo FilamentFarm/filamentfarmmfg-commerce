@@ -91,7 +91,7 @@ export const CLIENT_CONFIGS: Record<string, ClientConfig> = {
     logoUrl: "/logos/printofthedeadlogo.png",
     theme: {
       primaryColor: "#110805",
-      backgroundColor: "#110805",
+      backgroundColor: "#000000",
       textColor: "#ffffff",
       productPageBackground: "#110805",
       productButtonColor: "#a21212",
