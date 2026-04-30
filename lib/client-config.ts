@@ -89,7 +89,6 @@ export const CLIENT_CONFIGS: Record<string, ClientConfig> = {
   printofthedead: {
     name: "Print of the Dead",
     logoUrl: "/logos/printofthedeadlogo.png",
-    bannerUrl: "/logos/printofthedeadlogo.png",
     theme: {
       primaryColor: "#110805",
       backgroundColor: "#110805",
